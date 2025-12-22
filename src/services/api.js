@@ -194,6 +194,17 @@ export const reviewsAPI = {
 };
 
 /* ======================
+   Settings API
+   ====================== */
+export const settingsAPI = {
+  getAll: () => api.get('/settings'),
+  getById: (id) => api.get(`/settings/${id}`),
+  create: (data) => api.post('/settings/save', data),
+  update: (id, data) => api.patch(`/settings/${id}`, data),
+  delete: (id) => api.delete(`/settings/${id}`),
+};
+
+/* ======================
    Contact API (JSON)
    ====================== */
 export const contactAPI = {

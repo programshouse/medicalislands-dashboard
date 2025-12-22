@@ -15,7 +15,7 @@ import Home from "./pages/Dashboard/Home";
 import Workshop from "./pages/Workshop";
 import Services from "./pages/Services";
 import Blogs from "./pages/Blogs";
-import Form from "./pages/Form";
+import Form from "./pages/Form/SettingsForm";
 
 // 👇 NEW: Reviews page bundle (index toggles list/form internally)
 import Reviews from "./pages/reviews";
