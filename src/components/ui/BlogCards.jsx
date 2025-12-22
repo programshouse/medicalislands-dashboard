@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 /**
  * BlogCards
@@ -67,21 +67,15 @@ export default function BlogCards({ apiUrl, headers = {}, onEdit }) {
 
   // Normalize ONE blog object from your API into the shape the UI needs
   const normalize = (raw) => {
-    const id = raw.id ?? raw._id ?? raw.uuid ?? raw.slug ?? Math.random().toString(36);
-    const title = raw.title ?? raw.name ?? raw.slug ?? "Untitled";
-
     // your API puts HTML in "content"
     const html = raw.content ?? raw.content_html ?? raw.html ?? raw.body ?? "";
     const text = stripHtml(html);
-
     return {
-      id,
-      title,
+      id: raw.id,
+      title: raw.title,
       html,
-      text,
-      description: raw.description ?? (text ? text.slice(0, 160) : "No content…"),
+      description: raw.content ?? (text ? text.slice(0, 160) : "No content…"),
       image: raw.image || null,
-      category: raw.category ?? raw.category_name ?? null,
       adminEmail: raw.admin?.email ?? null,
       created: raw.created_at ?? raw.createdAt ?? raw.date ?? "",
       stats: {
@@ -223,7 +217,6 @@ export default function BlogCards({ apiUrl, headers = {}, onEdit }) {
 
               <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
                 <h4 style={{ margin: "0 0 6px 0", lineHeight: 1.25 }}>{it.title}</h4>
-                {it.category && <span style={pill}>{it.category}</span>}
               </div>
 
               <div style={{ fontSize: 12, color: "#64748b", marginBottom: 8 }}>
@@ -307,14 +300,6 @@ const empty = {
   border: "1px dashed #94a3b8",
   borderRadius: 12,
   color: "#64748b",
-};
-
-const pill = {
-  fontSize: 11,
-  color: "#1e293b",
-  background: "#e2e8f0",
-  borderRadius: 999,
-  padding: "2px 8px",
 };
 
 const statsRow = {

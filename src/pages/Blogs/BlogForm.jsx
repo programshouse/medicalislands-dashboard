@@ -1,33 +1,34 @@
-// src/pages/blog/BlogFormTiny.jsx
 import React, { useEffect, useState } from "react";
 import AdminForm from "../../components/ui/AdminForm";
 import FileUpload from "../../components/ui/FileUpload";
-import { blogsAPI } from "../../services/api";
+import { useBlogStore } from "../../stors/useBlogStore";
+import { useAuthStore } from "../../stors/useAuthStore";
 import { Editor } from "@tinymce/tinymce-react";
 
 export default function BlogFormTiny({ blogId, onSuccess, apiKey = "lmml35k9i4dyhe5swfgxoufuqhwpbcqgz25m38779fehig9r" }) {
-  const [loading, setLoading] = useState(!!blogId);
-  const [saving, setSaving]   = useState(false);
+  const { loading, selectedBlog, fetchBlogById, createBlog, updateBlog } = useBlogStore();
+  const { admin } = useAuthStore();
+  const [saving, setSaving] = useState(false);
 
-  const [title, setTitle]           = useState("");
-  const [description, setDesc]      = useState(""); // HTML
-  const [image, setImage]           = useState(null); // File or URL string
+  const [title, setTitle] = useState("");
+  const [description, setDesc] = useState(""); // HTML
+  const [image, setImage] = useState(null); // File or URL string
 
   // load for edit
   useEffect(() => {
     if (!blogId) return;
-    (async () => {
-      try {
-        setLoading(true);
-        const { data } = await blogsAPI.getById(blogId);
-        setTitle(data?.title || "");
-        setDesc(data?.description || "");
-        setImage(data?.image || null); // can be URL
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [blogId]);
+    fetchBlogById(blogId);
+  }, [blogId, fetchBlogById]);
+
+  // Update form when selectedBlog changes
+  useEffect(() => {
+    if (selectedBlog) {
+      setTitle(selectedBlog?.title || "");
+      // Handle both "description" (from API response) and "content" (for form submission)
+      setDesc(selectedBlog?.description || selectedBlog?.content || "");
+      setImage(selectedBlog?.image || null); // can be URL
+    }
+  }, [selectedBlog]);
 
   const onFile = (e) => {
     const f = e.target.files?.[0] || null;
@@ -36,24 +37,44 @@ export default function BlogFormTiny({ blogId, onSuccess, apiKey = "lmml35k9i4dy
 
   const submit = async (e) => {
     e.preventDefault();
-    if (!title.trim() || !description.trim()) return;
+    if (!title.trim() || !description.trim()) {
+      alert("Please fill in both title and content fields.");
+      return;
+    }
 
     try {
       setSaving(true);
       const fd = new FormData();
       fd.append("title", title.trim());
-      fd.append("description", description);
+      fd.append("content", description); // API expects "content" not "description"
+      fd.append("is_active", "1"); // Default to active
+      fd.append("user_name", admin?.name || "Admin"); // Get from auth store
 
       // only append if it's a new File; skip if unchanged string URL
       if (image instanceof File) fd.append("image", image);
 
-      if (blogId) await blogsAPI.update(blogId, fd);
-      else await blogsAPI.create(fd);
+      console.log("Submitting blog data:", {
+        title: title.trim(),
+        content: description.substring(0, 100) + "...",
+        hasImage: image instanceof File,
+        imageType: image ? image.type : 'N/A',
+        imageSize: image ? image.size : 'N/A',
+        is_active: "1",
+        user_name: admin?.name || "Admin"
+      });
+
+      if (blogId) {
+        await updateBlog(blogId, fd);
+      } else {
+        await createBlog(fd);
+      }
 
       onSuccess && onSuccess();
     } catch (err) {
-      console.error(err);
-      alert("Error saving blog. Please try again.");
+      console.error("Blog creation error:", err);
+      const errorMessage = err?.response?.data?.message || err?.message || "Unknown error occurred";
+      console.error("Error details:", errorMessage);
+      alert(`Error saving blog: ${errorMessage}`);
     } finally {
       setSaving(false);
     }
@@ -114,7 +135,10 @@ export default function BlogFormTiny({ blogId, onSuccess, apiKey = "lmml35k9i4dy
         <Editor
           apiKey={apiKey}
           value={description}
-          onEditorChange={(html) => setDesc(html)}
+          onEditorChange={(html) => {
+            console.log("Editor content changed:", html.substring(0, 50) + "...");
+            setDesc(html);
+          }}
           init={{
             height: 520,
             menubar: false,
@@ -132,6 +156,12 @@ export default function BlogFormTiny({ blogId, onSuccess, apiKey = "lmml35k9i4dy
               new Promise((resolve) => {
                 resolve("data:" + blobInfo.blob().type + ";base64," + blobInfo.base64());
               }),
+            setup: (editor) => {
+              console.log("TinyMCE editor initialized");
+              editor.on('init', () => {
+                console.log("TinyMCE editor ready");
+              });
+            }
           }}
         />
       </div>

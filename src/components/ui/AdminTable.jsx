@@ -1,5 +1,5 @@
 import React from "react";
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { ViewButton, EditButton, DeleteButton } from "./IconButton";
 
 const AdminTable = ({ 
   title, 
@@ -57,28 +57,16 @@ const AdminTable = ({
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <div className="flex gap-2">
                       {onShow && (
-                        <button
+                        <ViewButton
                           onClick={() => onShow(item, index)}
-                          className="text-black hover:text-brand-900 dark:text-brand-400 dark:hover:text-brand-300 p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                          title="View"
-                        >
-                          <Eye className="w-4 h-4" />
-                        </button>
+                        />
                       )}
-                      <button
+                      <EditButton
                         onClick={() => onEdit(item, index)}
-                        className="text-brand-600 hover:text-brand-900 dark:text-brand-400 dark:hover:text-brand-300 p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                        title="Edit"
-                      >
-                        <Pencil className="w-4 h-4" />
-                      </button>
-                      <button
+                      />
+                      <DeleteButton
                         onClick={() => onDelete(index)}
-                        className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                        title="Delete"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      />
                     </div>
                   </td>
                 </tr>

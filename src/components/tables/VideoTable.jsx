@@ -1,4 +1,5 @@
 import React from "react";
+import { EditButton, DeleteButton } from "../ui/IconButton";
 
 export default function VideoTable({ rows = [], onDelete, onEdit }) {
   if (!rows.length) {
@@ -42,18 +43,12 @@ export default function VideoTable({ rows = [], onDelete, onEdit }) {
                 <td className="px-4 py-3">{row.createdAt || "-"}</td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
-                    <button
+                    <EditButton
                       onClick={() => onEdit?.(row)}
-                      className="rounded-lg border border-[var(--border-brand)] px-3 py-1 text-xs hover:bg-brand-25"
-                    >
-                      Edit
-                    </button>
-                    <button
+                    />
+                    <DeleteButton
                       onClick={() => onDelete?.(row)}
-                      className="rounded-lg bg-brand-600 px-3 py-1 text-xs text-white hover:bg-brand-500"
-                    >
-                      Delete
-                    </button>
+                    />
                   </div>
                 </td>
               </tr>
