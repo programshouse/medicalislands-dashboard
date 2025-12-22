@@ -1,94 +1,62 @@
-// src/pages/SettingsForm.jsx
-import React, { useEffect, useMemo, useState } from "react";
-import AdminForm from "../components/ui/AdminForm";
-import { useSettingsStore } from "../stors/useSettingsStore";
-
-const emptyForm = {
-  site_name: "",
-  email: "",
-  phone: "",
-  address: "",
-  facebook: "",
-  instagram: "",
-  linkedin: "",
-  twitter: "",
-  whatsapp: "",
-};
+import React, { useEffect, useState } from "react";
+import AdminForm from "../../components/ui/AdminForm";
+import { useSettingsStore } from "../../stors/useSettingsStore";
 
 export default function SettingsForm({ settingsId, onSuccess }) {
+  const [formData, setFormData] = useState({
+    site_name: "",
+    email: "",
+    phone: "",
+    address: "",
+    facebook: "",
+    instagram: "",
+    linkedin: "",
+    twitter: "",
+    whatsapp: "",
+  });
+
   const {
     settings,
     loading,
-    error,
-    getSettings,
     getSettingsById,
     createSettings,
     updateSettings,
     clearSettings,
   } = useSettingsStore();
 
-  const [formData, setFormData] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
 
-  // if backend returns settings as array in /settings
-  const settingsRecord = useMemo(() => {
-    if (!settings) return null;
-    if (Array.isArray(settings)) return settings[0] ?? null;
-    return settings;
-  }, [settings]);
-
-  const effectiveId = useMemo(() => {
-    // if passed explicitly
-    if (settingsId) return settingsId;
-    // if loaded from getSettings and it has id
-    if (settingsRecord?.id) return settingsRecord.id;
-    return null;
-  }, [settingsId, settingsRecord]);
-
   useEffect(() => {
-    let alive = true;
-
     const load = async () => {
       try {
-        if (settingsId) {
-          await getSettingsById(settingsId);
-        } else {
-          // load default/first settings
-          await getSettings();
-        }
+        await getSettingsById(settingsId);
       } catch (e) {
         console.error("Error loading settings:", e);
       }
     };
 
-    load();
+    if (settingsId) load();
 
     return () => {
-      alive = false;
       clearSettings();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settingsId]);
+  }, [settingsId, getSettingsById, clearSettings]);
 
   useEffect(() => {
-    const s = settingsRecord;
-    if (!s) {
-      setFormData(emptyForm);
-      return;
+    if (settingsId && settings) {
+      setFormData({
+        site_name: settings.site_name || "",
+        email: settings.email || "",
+        phone: settings.phone || "",
+        address: settings.address || "",
+        facebook: settings.facebook || "",
+        instagram: settings.instagram || "",
+        linkedin: settings.linkedin || "",
+        twitter: settings.twitter || "",
+        whatsapp: settings.whatsapp || "",
+      });
     }
-
-    setFormData({
-      site_name: s.site_name || "",
-      email: s.email || "",
-      phone: s.phone || "",
-      address: s.address || "",
-      facebook: s.facebook || "",
-      instagram: s.instagram || "",
-      linkedin: s.linkedin || "",
-      twitter: s.twitter || "",
-      whatsapp: s.whatsapp || "",
-    });
-  }, [settingsRecord]);
+  }, [settingsId, settings]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -101,45 +69,44 @@ export default function SettingsForm({ settingsId, onSuccess }) {
     try {
       setSaving(true);
 
-      if (effectiveId) {
-        await updateSettings(effectiveId, formData);
+      if (settingsId) {
+        await updateSettings(settingsId, formData);
       } else {
         await createSettings(formData);
       }
 
-      onSuccess?.();
-    } catch (err) {
-      console.error("Error saving settings:", err);
+      if (onSuccess) onSuccess();
+    } catch (error) {
+      console.error("Error saving settings:", error);
     } finally {
       setSaving(false);
     }
   };
 
-  const handleCancel = () => onSuccess?.();
+  const handleCancel = () => {
+    if (onSuccess) onSuccess();
+  };
 
   if (loading) {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 text-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500 mx-auto" />
-        <p className="mt-2 text-gray-600 dark:text-gray-300">Loading settings...</p>
+        <p className="mt-2 text-gray-600 dark:text-gray-300">
+          Loading settings...
+        </p>
       </div>
     );
   }
 
   return (
     <AdminForm
-      title={effectiveId ? "Edit Settings" : "Add New Settings"}
+      title={settingsId ? "Edit Settings" : "Add New Settings"}
       onSubmit={handleSubmit}
       onCancel={handleCancel}
-      submitText={saving ? "Saving..." : effectiveId ? "Update Settings" : "Create Settings"}
-      submitDisabled={saving}
+      submitText={
+        saving ? "Saving..." : settingsId ? "Update Settings" : "Create Settings"
+      }
     >
-      {error ? (
-        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-          {String(error)}
-        </div>
-      ) : null}
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -215,7 +182,6 @@ export default function SettingsForm({ settingsId, onSuccess }) {
         <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
           Social Media Links
         </h3>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">

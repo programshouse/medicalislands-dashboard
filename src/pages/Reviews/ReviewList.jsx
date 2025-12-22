@@ -4,13 +4,19 @@ import PageHeader from "../../components/ui/PageHeader";
 import PageCard from "../../components/ui/PageCard";
 import { useReviewStore } from "../../stors/useReviewStore";
 
-export default function ReviewList({ onAdd, onEdit }) {
+export default function ReviewList({ onAdd, onEdit, onEditComplete }) {
   const { reviews, loading, getAllReviews, deleteReview } = useReviewStore();
   const [selectedReview, setSelectedReview] = useState(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     getAllReviews().catch(console.error);
-  }, [getAllReviews]);
+  }, [getAllReviews, refreshKey]);
+
+  const handleEditComplete = () => {
+    setRefreshKey(prev => prev + 1);
+    onEditComplete?.();
+  };
 
   const handleDelete = async (review) => {
     if (window.confirm(`Are you sure you want to delete the review from ${review.user_name || 'Unknown'}?`)) {
@@ -63,12 +69,18 @@ export default function ReviewList({ onAdd, onEdit }) {
               {reviews.map((r) => (
                 <div key={r.id} className="rounded-xl border border-gray-200 dark:border-gray-700 p-4 bg-white dark:bg-gray-800">
                   <div className="flex items-center gap-3">
-                    {r.user_image && (
+                    {r.user_image ? (
                       <img
-                        src={typeof r.user_image === "string" ? r.user_image : URL.createObjectURL(r.user_image)}
+                        src={typeof r.user_image === "string" ? r.user_image : (r.user_image instanceof File || r.user_image instanceof Blob) ? URL.createObjectURL(r.user_image) : ''}
                         alt={r.user_name || "Reviewer"}
                         className="w-12 h-12 rounded-full object-cover border"
                       />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-600 border border-gray-300 dark:border-gray-500 flex items-center justify-center">
+                        <svg className="w-6 h-6 text-gray-400 dark:text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                        </svg>
+                      </div>
                     )}
                     <div className="flex-1">
                       <div className="font-semibold text-gray-900 dark:text-white">{r.user_name || "Unnamed"}</div>
@@ -86,7 +98,7 @@ export default function ReviewList({ onAdd, onEdit }) {
                         </svg>
                       </button>
                       <button
-                        onClick={() => onEdit?.(r)}
+                        onClick={() => onEdit?.(r, handleEditComplete)}
                         className="p-2 rounded-md border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
                         title="Edit"
                       >
@@ -133,7 +145,7 @@ export default function ReviewList({ onAdd, onEdit }) {
               <div className="flex items-center gap-4 mb-6">
                 {selectedReview.user_image ? (
                   <img
-                    src={typeof selectedReview.user_image === "string" ? selectedReview.user_image : URL.createObjectURL(selectedReview.user_image)}
+                    src={typeof selectedReview.user_image === "string" ? selectedReview.user_image : (selectedReview.user_image instanceof File || selectedReview.user_image instanceof Blob) ? URL.createObjectURL(selectedReview.user_image) : ''}
                     alt={selectedReview.user_name || "Reviewer"}
                     className="w-20 h-20 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600"
                   />
@@ -196,7 +208,7 @@ export default function ReviewList({ onAdd, onEdit }) {
                   <button
                     onClick={() => {
                       setSelectedReview(null);
-                      onEdit?.(selectedReview);
+                      onEdit?.(selectedReview, handleEditComplete);
                     }}
                     className="flex items-center gap-2 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg"
                   >

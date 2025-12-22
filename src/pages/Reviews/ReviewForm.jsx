@@ -1,3 +1,4 @@
+// src/pages/reviews/review-form.jsx
 import React, { useEffect, useState } from "react";
 import AdminForm from "../../components/ui/AdminForm";
 import FileUpload from "../../components/ui/FileUpload";
@@ -9,45 +10,67 @@ export default function ReviewForm({ reviewId, onSuccess }) {
   const [user_name, setUserName] = useState("");
   const [user_job, setUserJob] = useState("");
   const [review_text, setReviewText] = useState("");
-  const [user_image, setUserImage] = useState(null);
+  const [user_image, setUserImage] = useState(null); // ✅ File
+  const [existingImageUrl, setExistingImageUrl] = useState(""); // ✅ URL string from API
 
   useEffect(() => {
-    if (!reviewId) return;
+    let mounted = true;
+
+    if (!reviewId) {
+      setUserName("");
+      setUserJob("");
+      setReviewText("");
+      setUserImage(null);
+      setExistingImageUrl("");
+      return;
+    }
+
     (async () => {
       try {
         const data = await getReviewById(reviewId);
+        if (!mounted) return;
+
         setUserName(data?.user_name || "");
         setUserJob(data?.user_job || "");
         setReviewText(data?.review || "");
-        setUserImage(data?.user_image || null);
+
+        // API returns url string
+        setExistingImageUrl(data?.user_image || "");
+        // don’t auto-convert url to file
+        setUserImage(null);
       } catch (error) {
         console.error("Error loading review:", error);
       }
     })();
+
+    return () => {
+      mounted = false;
+    };
   }, [reviewId, getReviewById]);
 
+  // ✅ matches FileUpload emission: onChange({ target:{ name, value:file } })
   const onFile = (e) => {
-    const { value } = e.target;
-    setUserImage(value);
+    const file = e?.target?.value ?? null; // File or null
+    setUserImage(file);
+    if (file) setExistingImageUrl("");
   };
 
   const submit = async (e) => {
     e.preventDefault();
     if (!user_name.trim() || !review_text.trim()) return;
+
     try {
       const reviewData = {
         user_name: user_name.trim(),
         user_job: user_job.trim(),
         review: review_text.trim(),
-        user_image,
+        user_image, // ✅ File
         is_active: 1,
       };
-      
-      if (reviewId) {
-        await updateReview(reviewId, reviewData);
-      } else {
-        await createReview(reviewData);
-      }
+
+      if (reviewId) await updateReview(reviewId, reviewData);
+      else await createReview(reviewData);
+
       onSuccess && onSuccess();
     } catch (err) {
       console.error(err);
@@ -55,15 +78,6 @@ export default function ReviewForm({ reviewId, onSuccess }) {
   };
 
   const cancel = () => onSuccess && onSuccess();
-
-  if (loading) {
-    return (
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 text-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500 mx-auto"></div>
-        <p className="mt-2 text-gray-600 dark:text-gray-300">Loading review…</p>
-      </div>
-    );
-  }
 
   return (
     <AdminForm
@@ -73,9 +87,18 @@ export default function ReviewForm({ reviewId, onSuccess }) {
       submitText={loading ? "Saving..." : reviewId ? "Update Review" : "Create Review"}
       submitDisabled={loading || !user_name.trim() || !review_text.trim()}
     >
+      {loading && (
+        <div className="mb-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500 mx-auto"></div>
+          <p className="mt-2 text-gray-600 dark:text-gray-300">Loading review…</p>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">User Name *</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            User Name *
+          </label>
           <input
             value={user_name}
             onChange={(e) => setUserName(e.target.value)}
@@ -88,7 +111,9 @@ export default function ReviewForm({ reviewId, onSuccess }) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">User Job</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            User Job
+          </label>
           <input
             value={user_job}
             onChange={(e) => setUserJob(e.target.value)}
@@ -99,11 +124,11 @@ export default function ReviewForm({ reviewId, onSuccess }) {
           <p className="text-xs text-gray-500 mt-1">{user_job.length}/120</p>
         </div>
 
-        <div>
+        <div className="md:col-span-2">
           <FileUpload
             label="User Image (optional)"
             name="user_image"
-            value={user_image}
+            value={user_image || existingImageUrl || null}
             onChange={onFile}
             accept="image/*"
           />

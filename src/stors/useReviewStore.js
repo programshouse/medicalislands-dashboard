@@ -3,7 +3,6 @@ import { create } from "zustand";
 import { toast } from "react-toastify";
 
 const API_URL = "https://www.programshouse.com/dashboards/medical/api";
-
 const getToken = () => localStorage.getItem("access_token");
 
 const pickFile = (img) => {
@@ -11,6 +10,9 @@ const pickFile = (img) => {
   if (img instanceof File) return img;
   if (img instanceof FileList) return img[0] ?? null;
   if (Array.isArray(img)) return img[0] ?? null;
+  if (img?.file instanceof File) return img.file;
+  // if FileUpload sends {target:{value:file}}
+  if (img?.target?.value instanceof File) return img.target.value;
   return null;
 };
 
@@ -29,7 +31,6 @@ export const useReviewStore = create((set) => ({
   loading: false,
   error: null,
 
-  // Get all reviews
   getAllReviews: async () => {
     try {
       set({ loading: true, error: null });
@@ -52,7 +53,6 @@ export const useReviewStore = create((set) => ({
     }
   },
 
-  // Get review by ID
   getReviewById: async (id) => {
     try {
       set({ loading: true, error: null });
@@ -78,16 +78,12 @@ export const useReviewStore = create((set) => ({
     }
   },
 
-  // Create review (FormData like Postman: review, user_name, user_job, user_image, is_active)
+  // ✅ Create
   createReview: async (reviewData) => {
     try {
       set({ loading: true, error: null });
 
       const file = pickFile(reviewData?.user_image);
-      console.log("reviewData:", reviewData);
-      console.log("picked file:", file);
-      console.log("image type:", typeof reviewData?.user_image, reviewData?.user_image?.constructor?.name);
-      
       let response;
 
       if (file) {
@@ -95,14 +91,12 @@ export const useReviewStore = create((set) => ({
         formData.append("review", reviewData?.review ?? "");
         formData.append("user_name", reviewData?.user_name ?? "");
         formData.append("user_job", reviewData?.user_job ?? "");
-        formData.append("image", file); // Backend expects 'image' not 'user_image'
-        formData.append("is_active", reviewData?.is_active ?? 1);
+        formData.append("user_image", file); // ✅ correct key
+        formData.append("is_active", String(reviewData?.is_active ?? 1));
 
         response = await fetch(`${API_URL}/reviews`, {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${getToken()}`,
-          },
+          headers: { Authorization: `Bearer ${getToken()}` },
           body: formData,
         });
       } else {
@@ -145,99 +139,118 @@ export const useReviewStore = create((set) => ({
     }
   },
 
-  // Update review
-  updateReview: async (id, reviewData) => {
-    try {
-      set({ loading: true, error: null });
+// ✅ Update review (force refresh image)
+updateReview: async (id, reviewData) => {
+  try {
+    set({ loading: true, error: null });
 
-      const file = pickFile(reviewData?.user_image);
-      let response;
+    const file = pickFile(reviewData?.user_image);
+    let response;
 
-      if (file) {
-        const formData = new FormData();
-        formData.append("review", reviewData?.review ?? "");
-        formData.append("user_name", reviewData?.user_name ?? "");
-        formData.append("user_job", reviewData?.user_job ?? "");
-        formData.append("user_image", file);
-        formData.append("is_active", reviewData?.is_active ?? 1);
-        formData.append("_method", "PUT");
+    if (file) {
+      const formData = new FormData();
+      formData.append("review", reviewData?.review ?? "");
+      formData.append("user_name", reviewData?.user_name ?? "");
+      formData.append("user_job", reviewData?.user_job ?? "");
+      formData.append("user_image", file);
+      formData.append("is_active", String(reviewData?.is_active ?? 1));
 
+      // PATCH multipart like Postman
+      response = await fetch(`${API_URL}/reviews/${id}`, {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${getToken()}` },
+        body: formData,
+      });
+
+      // fallback
+      if (!response.ok) {
+        formData.append("_method", "PATCH");
         response = await fetch(`${API_URL}/reviews/${id}`, {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${getToken()}`,
-          },
+          headers: { Authorization: `Bearer ${getToken()}` },
           body: formData,
         });
-
-        if (!response.ok) {
-          response = await fetch(`${API_URL}/reviews/${id}`, {
-            method: "PATCH",
-            headers: {
-              Authorization: `Bearer ${getToken()}`,
-            },
-            body: formData,
-          });
-        }
-      } else {
-        response = await fetch(`${API_URL}/reviews/${id}`, {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${getToken()}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            review: reviewData?.review ?? "",
-            user_name: reviewData?.user_name ?? "",
-            user_job: reviewData?.user_job ?? "",
-            is_active: reviewData?.is_active ?? 1,
-          }),
-        });
       }
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(
-          `Failed to update review: ${response.status} ${errorText}`
-        );
-      }
-
-      const json = await response.json();
-      const updatedReview = extractData(json);
-
-      set((state) => ({
-        reviews: (state.reviews || []).map((r) =>
-          r.id === id ? updatedReview : r
-        ),
-        review: state.review?.id === id ? updatedReview : state.review,
-        loading: false,
-      }));
-
-      toast.success("Review updated successfully!");
-      return updatedReview;
-    } catch (err) {
-      set({ error: err.message || "Failed to update review", loading: false });
-      toast.error(err.message || "Failed to update review");
-      throw err;
+    } else {
+      response = await fetch(`${API_URL}/reviews/${id}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          review: reviewData?.review ?? "",
+          user_name: reviewData?.user_name ?? "",
+          user_job: reviewData?.user_job ?? "",
+          is_active: reviewData?.is_active ?? 1,
+        }),
+      });
     }
-  },
 
-  // Delete review
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to update review: ${response.status} ${errorText}`);
+    }
+
+    const json = await response.json();
+    let updatedReview = extractData(json);
+
+    // ✅ if backend returns null/old image, refetch show endpoint once
+    // (this is the safest way when API response is not updated)
+    if (file && (!updatedReview?.user_image || updatedReview?.user_image === null)) {
+      const showRes = await fetch(`${API_URL}/reviews/${id}`, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+          "Content-Type": "application/json",
+        },
+      });
+      if (showRes.ok) {
+        const showJson = await showRes.json();
+        updatedReview = extractData(showJson) || updatedReview;
+      }
+    }
+
+    // ✅ cache bust image url so browser shows the new file immediately
+    if (updatedReview?.user_image && typeof updatedReview.user_image === "string") {
+      const ts = Date.now();
+      const sep = updatedReview.user_image.includes("?") ? "&" : "?";
+      updatedReview = {
+        ...updatedReview,
+        user_image: `${updatedReview.user_image}${sep}t=${ts}`,
+      };
+    }
+
+    set((state) => ({
+      reviews: (state.reviews || []).map((r) =>
+        String(r.id) === String(id) ? updatedReview : r
+      ),
+      review: String(state.review?.id) === String(id) ? updatedReview : state.review,
+      loading: false,
+    }));
+
+    toast.success("Review updated successfully!");
+    return updatedReview;
+  } catch (err) {
+    set({ error: err.message || "Failed to update review", loading: false });
+    toast.error(err.message || "Failed to update review");
+    throw err;
+  }
+},
+
+
   deleteReview: async (id) => {
     try {
       set({ loading: true, error: null });
 
       const response = await fetch(`${API_URL}/reviews/${id}`, {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${getToken()}`,
-        },
+        headers: { Authorization: `Bearer ${getToken()}` },
       });
 
       if (!response.ok) throw new Error("Failed to delete review");
 
       set((state) => ({
-        reviews: (state.reviews || []).filter((r) => r.id !== id),
+        reviews: (state.reviews || []).filter((r) => String(r.id) !== String(id)),
         loading: false,
       }));
 
@@ -250,9 +263,6 @@ export const useReviewStore = create((set) => ({
     }
   },
 
-  // Clear current review
   clearReview: () => set({ review: null }),
-
-  // Clear error
   clearError: () => set({ error: null }),
 }));

@@ -15,12 +15,20 @@ export default function Reviews() {
     setShowForm(true);
   };
 
-  const handleEdit = (review) => {
+  const handleEdit = (review, onComplete) => {
     setEditing(review);
     setShowForm(true);
+    // Store the callback to be called after form success
+    if (onComplete) {
+      setEditing({ ...review, _onComplete: onComplete });
+    }
   };
 
   const handleFormSuccess = () => {
+    // Call the completion callback if it exists
+    if (editing?._onComplete) {
+      editing._onComplete();
+    }
     setShowForm(false);
     setEditing(null);
   };
