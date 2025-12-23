@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ServiceForm from "./ServiceForm";
 import ServiceList from "./ServiceList";
-import ServiceDetailModal from "../../components/ui/ServiceDetailModal";
 import { useServicesStore } from "../../stors/useServicesStore";
 
 export default function Services() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [showForm, setShowForm] = useState(false);
   const [editingService, setEditingService] = useState(null);
-  const [selectedService, setSelectedService] = useState(null);
-  const [showDetailModal, setShowDetailModal] = useState(false);
   const { getAllServices } = useServicesStore();
 
   const isForm = location.pathname.includes("/form") || showForm;
@@ -26,13 +24,7 @@ export default function Services() {
   };
 
   const handleShow = (service) => {
-    setSelectedService(service);
-    setShowDetailModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowDetailModal(false);
-    setSelectedService(null);
+    navigate(`/services/${service.id}`);
   };
 
   const handleFormSuccess = () => {
@@ -52,13 +44,6 @@ export default function Services() {
   }
 
   return (
-    <>
-      <ServiceList onEdit={handleEdit} onAdd={handleAdd} onShow={handleShow} />
-      <ServiceDetailModal
-        service={selectedService}
-        isOpen={showDetailModal}
-        onClose={handleCloseModal}
-      />
-    </>
+    <ServiceList onEdit={handleEdit} onAdd={handleAdd} onShow={handleShow} />
   );
 }

@@ -13,12 +13,17 @@ import Card from "./components/ui/card.jsx";
 import AppLayout from "./layout/AppLayout";
 import Home from "./pages/Dashboard/Home";
 import Workshop from "./pages/Workshop";
+import WorkshopDetail from "./pages/Workshop/WorkshopDetail";
 import Services from "./pages/Services";
+import ServiceDetail from "./pages/Services/ServiceDetail";
 import Blogs from "./pages/Blogs";
-import Form from "./pages/Form/SettingsForm";
+import BlogDetails from "./pages/Blogs/BlogDetails";
+import Settings from "./pages/Settings/SettingsList.jsx";
+import SettingsForm from "./pages/Settings/SettingsForm.jsx";
 
 // 👇 NEW: Reviews page bundle (index toggles list/form internally)
 import Reviews from "./pages/reviews";
+import ReviewDetail from "./pages/Reviews/ReviewDetail";
 
 // GuestOnlyRoute: only guests (not logged-in)
 const GuestOnlyRoute = ({ children }) => {
@@ -36,17 +41,24 @@ const router = createBrowserRouter([
       // Workshops
       { path: "/workshop", element: <Workshop /> },
       { path: "/workshop/form", element: <Workshop /> },
+      { path: "/workshop/:id", element: <WorkshopDetail /> },
 
       // Services
       { path: "/services", element: <Services /> },
       { path: "/services/form", element: <Services /> },
+      { path: "/services/:id", element: <ServiceDetail /> },
 
       // Blogs
       { path: "/blogs", element: <Blogs /> },
       { path: "/blogs/form", element: <Blogs /> },
+      { path: "/blogs/:id", element: <BlogDetails /> },
 
       // Contact form
-      { path: "/form", element: <Form /> },
+      { path: "/form", element: <SettingsForm /> },
+
+      // Settings
+      { path: "/settings", element: <Settings /> },
+      { path: "/settings/form", element: <SettingsForm /> },
 
       // Demo card page
       { path: "/card", element: <Card /> },

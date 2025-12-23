@@ -1,6 +1,9 @@
 // src/components/dashboard/EcommerceMetrics.jsx
 import React, { useEffect, useMemo } from "react";
 import { useApiStore } from "../../stors/useApiStore";
+import { useWorkshopStore } from "../../stors/useWorkshopStore";
+import { useBlogStore } from "../../stors/useBlogStore";
+import { useReviewStore } from "../../stors/useReviewStore";
 import { BoxIconLine, GroupIcon } from "../../icons";
 
 function MetricCard({ icon, title, value, loading }) {
@@ -39,9 +42,15 @@ function pick(obj, keys, fallback = 0) {
 
 export default function EcommerceMetrics() {
   const { fetchHome, contacts, loading } = useApiStore();
+  const { workshops, fetchWorkshops } = useWorkshopStore();
+  const { blogs, fetchBlogs } = useBlogStore();
+  const { reviews, fetchReviews } = useReviewStore();
 
   useEffect(() => {
     fetchHome?.();
+    fetchWorkshops?.();
+    fetchBlogs?.();
+    fetchReviews?.();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -50,17 +59,17 @@ export default function EcommerceMetrics() {
     return typeof contacts === "object" && contacts?.data ? contacts.data : contacts;
   }, [contacts]);
 
-  const workshops = useMemo(
-    () => pick(src, ["workshops", "workshops_count", "stats.workshops", "counts.workshops"], 0),
-    [src]
+  const workshopCount = useMemo(
+    () => workshops?.length || pick(src, ["workshops", "workshops_count", "stats.workshops", "counts.workshops"], 0),
+    [workshops, src]
   );
-  const books = useMemo(
-    () => pick(src, ["books", "books_count", "stats.books", "counts.books"], 0),
-    [src]
+  const blogCount = useMemo(
+    () => blogs?.length || 0,
+    [blogs]
   );
-  const sessions = useMemo(
-    () => pick(src, ["sessions", "sessions_count", "stats.sessions", "counts.sessions"], 0),
-    [src]
+  const reviewCount = useMemo(
+    () => reviews?.length || 0,
+    [reviews]
   );
   const users = useMemo(
     () => pick(src, ["users", "users_count", "stats.users", "counts.users", "total_users"], 0),
@@ -70,24 +79,24 @@ export default function EcommerceMetrics() {
   const nf = (n) => new Intl.NumberFormat().format(n);
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-4 md:gap-6">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 md:gap-6">
       <MetricCard
         icon={<BoxIconLine className="text-gray-800 size-6 dark:text-white/90" />}
         title="Workshops"
-        value={nf(workshops)}
-        loading={loading && workshops === 0}
+        value={nf(workshopCount)}
+        loading={loading && workshopCount === 0}
       />
       <MetricCard
         icon={<BoxIconLine className="text-gray-800 size-6 dark:text-white/90" />}
-        title="Books"
-        value={nf(books)}
-        loading={loading && books === 0}
+        title="Blogs"
+        value={nf(blogCount)}
+        loading={!blogs}
       />
       <MetricCard
         icon={<BoxIconLine className="text-gray-800 size-6 dark:text-white/90" />}
-        title="Sessions"
-        value={nf(sessions)}
-        loading={loading && sessions === 0}
+        title="Reviews"
+        value={nf(reviewCount)}
+        loading={!reviews}
       />
       <MetricCard
         icon={<GroupIcon className="text-gray-800 size-6 dark:text-white/90" />}

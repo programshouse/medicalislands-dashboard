@@ -65,6 +65,8 @@ export default function BlogFormTiny({ blogId, onSuccess, apiKey = "lmml35k9i4dy
 
       if (blogId) {
         await updateBlog(blogId, fd);
+        // Refresh the blog data after update to ensure latest data is displayed
+        await fetchBlogById(blogId);
       } else {
         await createBlog(fd);
       }

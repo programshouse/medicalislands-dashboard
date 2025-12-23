@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import BlogForm from "./BlogForm";
 import BlogList from "./BlogList";
+import { useBlogStore } from "../../stors/useBlogStore";
 
 export default function Blogs() {
   const location = useLocation();
   const [showForm, setShowForm] = useState(false);
   const [editingBlog, setEditingBlog] = useState(null);
+  const { fetchBlogs } = useBlogStore();
 
   const isForm = location.pathname.includes('/form') || showForm;
 
@@ -23,6 +25,8 @@ export default function Blogs() {
   const handleFormSuccess = () => {
     setShowForm(false);
     setEditingBlog(null);
+    // Refresh blog list to show updated data
+    fetchBlogs();
   };
 
   if (isForm) {

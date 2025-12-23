@@ -7,6 +7,7 @@ const AdminForm = ({
   onCancel,
   submitText = "Save",
   cancelText = "Cancel",
+  submitDisabled = false,
   className = "" 
 }) => {
   return (
@@ -21,7 +22,8 @@ const AdminForm = ({
         <div className="flex gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
           <button
             type="submit"
-            className="bg-brand-500 hover:bg-brand-600 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+            disabled={submitDisabled}
+            className="bg-brand-500 hover:bg-brand-500 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded-lg transition-colors"
           >
             {submitText}
           </button>

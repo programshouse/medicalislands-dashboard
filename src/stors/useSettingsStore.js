@@ -1,219 +1,138 @@
-// src/stors/useSettingsStore.js
 import { create } from "zustand";
 
-const STORAGE_KEY = "medical_settings";
+const API_URL = "https://www.programshouse.com/dashboards/medical/api";
 
-const safeParse = (raw) => {
-  if (!raw) return null;
-  try {
-    return JSON.parse(raw);
-  } catch {
-    return null;
-  }
-};
+const authHeaders = () => ({
+  Authorization: `Bearer ${localStorage.getItem("access_token") || ""}`,
+});
 
-// normalize: object OR array -> keep as-is but provide helpers
-const normalize = (data) => {
-  if (!data) return null;
-  if (Array.isArray(data)) return data;
-  if (typeof data === "object") return data;
-  return null;
-};
+const jsonHeaders = () => ({
+  ...authHeaders(),
+  Accept: "application/json",
+});
 
-const findById = (data, id) => {
-  const targetId = String(id);
-
+const mapApiToFormLike = (data) => {
   if (!data) return null;
 
-  if (Array.isArray(data)) {
-    return data.find((x) => x && String(x.id) === targetId) ?? null;
-  }
-
-  if (typeof data === "object") {
-    return String(data.id) === targetId ? data : null;
-  }
-
-  return null;
+  return {
+    ...data, // keep API keys: site_name, facebook, etc
+    siteName: data.siteName || data.site_name || "",
+    socials: {
+      facebook: data.facebook || "",
+      whatsapp: data.whatsapp || "",
+      instagram: data.instagram || "",
+      twitter: data.twitter || "",
+      linkedin: data.linkedin || "",
+    },
+  };
 };
 
-export const useSettingsStore = create((set) => ({
+const buildFormDataFromForm = (form) => {
+  const fd = new FormData();
+
+  fd.append("site_name", form?.siteName ?? "");
+  fd.append("email", form?.email ?? "");
+  fd.append("phone", form?.phone ?? "");
+  fd.append("address", form?.address ?? "");
+
+  fd.append("facebook", form?.socials?.facebook ?? "");
+  fd.append("instagram", form?.socials?.instagram ?? "");
+  fd.append("linkedin", form?.socials?.linkedin ?? "");
+  fd.append("twitter", form?.socials?.twitter ?? "");
+  fd.append("whatsapp", form?.socials?.whatsapp ?? "");
+
+  return fd;
+};
+
+export const useSettingsStore = create((set, get) => ({
   settings: null,
   loading: false,
   error: null,
 
-  // Get settings (default/first)
-  getSettings: async () => {
+  // GET /settings (returns object)
+  fetchSettings: async () => {
     set({ loading: true, error: null });
     try {
-      await new Promise((r) => setTimeout(r, 200));
+      const res = await fetch(`${API_URL}/settings`, {
+        method: "GET",
+        headers: jsonHeaders(),
+      });
 
-      const stored = safeParse(localStorage.getItem(STORAGE_KEY));
-      const settings = normalize(stored);
-
-      // If no stored data, return default settings
-      if (!settings) {
-        const defaultSettings = {
-          id: 1,
-          site_name: "prof",
-          email: "prof@com",
-          phone: "012345678",
-          address: "https://profmse.com/",
-          facebook: "https://profmse.com/",
-          instagram: "https://profmse.com/",
-          linkedin: "https://profmse.com/",
-          twitter: "https://profmse.com/",
-          whatsapp: "014567899",
-          created_at: "2025-10-29T13:27:50.000000Z",
-          updated_at: "2025-10-29T13:27:50.000000Z"
-        };
-        set({ settings: defaultSettings, loading: false });
-        return defaultSettings;
+      if (!res.ok) {
+        const txt = await res.text().catch(() => "");
+        throw new Error(txt || "Failed to fetch settings");
       }
 
-      set({ settings, loading: false });
-      return settings;
-    } catch (error) {
-      set({ error: error?.message || "Failed to load settings", loading: false });
-      throw error;
+      const data = await res.json();
+      const normalized = mapApiToFormLike(data);
+
+      set({ settings: normalized, loading: false });
+      return normalized;
+    } catch (e) {
+      set({ error: e?.message || "Failed to fetch settings", loading: false });
+      throw e;
     }
   },
 
-  // Get settings by ID (works with object OR array)
+  // If API doesn't support /settings/{id}, we still can just fetch.
   getSettingsById: async (id) => {
+    // If later you add an endpoint like /settings/show?id=, update here.
+    return get().fetchSettings();
+  },
+
+  // POST /settings/save (form-data)
+  updateSettings: async (form) => {
     set({ loading: true, error: null });
     try {
-      await new Promise((r) => setTimeout(r, 200));
+      const fd = buildFormDataFromForm(form);
 
-      const stored = safeParse(localStorage.getItem(STORAGE_KEY));
-      const settings = normalize(stored);
+      const res = await fetch(`${API_URL}/settings/save`, {
+        method: "POST",
+        headers: {
+          ...authHeaders(),
+          Accept: "application/json",
+          // DO NOT set Content-Type with FormData
+        },
+        body: fd,
+      });
 
-      const found = findById(settings, id);
-      if (!found) throw new Error("Settings not found");
+      if (!res.ok) {
+        const txt = await res.text().catch(() => "");
+        throw new Error(txt || "Failed to save settings");
+      }
 
-      // keep original structure in store (array/object)
-      // but you can also set found only if you prefer:
-      // set({ settings: found, loading: false });
-      set({ settings, loading: false });
+      const json = await res.json();
+      const saved = mapApiToFormLike(json?.data || json);
 
-      return found;
-    } catch (error) {
-      set({ error: error?.message || "Failed to load settings", loading: false });
-      throw error;
+      set({ settings: saved, loading: false });
+      return saved;
+    } catch (e) {
+      set({ error: e?.message || "Failed to save settings", loading: false });
+      throw e;
     }
   },
 
-  // Create settings
-  createSettings: async (settingsData) => {
+  // DELETE /settings/delete
+  deleteSettings: async () => {
     set({ loading: true, error: null });
     try {
-      await new Promise((r) => setTimeout(r, 300));
+      const res = await fetch(`${API_URL}/settings/delete`, {
+        method: "DELETE",
+        headers: jsonHeaders(),
+      });
 
-      const newSettings = {
-        id: Date.now().toString(),
-        ...settingsData,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      };
-
-      // store as OBJECT (single settings record)
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newSettings));
-      set({ settings: newSettings, loading: false });
-
-      return newSettings;
-    } catch (error) {
-      set({ error: error?.message || "Failed to create settings", loading: false });
-      throw error;
-    }
-  },
-
-  // Update settings (supports stored object OR array)
-  updateSettings: async (id, settingsData) => {
-    set({ loading: true, error: null });
-    try {
-      await new Promise((r) => setTimeout(r, 300));
-
-      const stored = safeParse(localStorage.getItem(STORAGE_KEY));
-      const settings = normalize(stored);
-
-      const targetId = String(id);
-
-      if (Array.isArray(settings)) {
-        const idx = settings.findIndex((x) => x && String(x.id) === targetId);
-        if (idx === -1) throw new Error("Settings not found");
-
-        const updatedOne = {
-          ...settings[idx],
-          ...settingsData,
-          updated_at: new Date().toISOString(),
-        };
-
-        const updatedArr = [...settings];
-        updatedArr[idx] = updatedOne;
-
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedArr));
-        set({ settings: updatedArr, loading: false });
-
-        return updatedOne;
+      if (!res.ok) {
+        const txt = await res.text().catch(() => "");
+        throw new Error(txt || "Failed to delete settings");
       }
 
-      if (!settings || typeof settings !== "object" || String(settings.id) !== targetId) {
-        throw new Error("Settings not found");
-      }
-
-      const updatedSettings = {
-        ...settings,
-        ...settingsData,
-        updated_at: new Date().toISOString(),
-      };
-
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedSettings));
-      set({ settings: updatedSettings, loading: false });
-
-      return updatedSettings;
-    } catch (error) {
-      set({ error: error?.message || "Failed to update settings", loading: false });
-      throw error;
-    }
-  },
-
-  // Delete settings (supports stored object OR array)
-  deleteSettings: async (id) => {
-    set({ loading: true, error: null });
-    try {
-      await new Promise((r) => setTimeout(r, 200));
-
-      const stored = safeParse(localStorage.getItem(STORAGE_KEY));
-      const settings = normalize(stored);
-      const targetId = String(id);
-
-      if (Array.isArray(settings)) {
-        const filtered = settings.filter((x) => x && String(x.id) !== targetId);
-        if (filtered.length === settings.length) throw new Error("Settings not found");
-
-        if (filtered.length === 0) {
-          localStorage.removeItem(STORAGE_KEY);
-          set({ settings: null, loading: false });
-          return true;
-        }
-
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
-        set({ settings: filtered, loading: false });
-        return true;
-      }
-
-      if (!settings || typeof settings !== "object" || String(settings.id) !== targetId) {
-        throw new Error("Settings not found");
-      }
-
-      localStorage.removeItem(STORAGE_KEY);
       set({ settings: null, loading: false });
       return true;
-    } catch (error) {
-      set({ error: error?.message || "Failed to delete settings", loading: false });
-      throw error;
+    } catch (e) {
+      set({ error: e?.message || "Failed to delete settings", loading: false });
+      throw e;
     }
   },
 
-  // Clear
   clearSettings: () => set({ settings: null, error: null }),
 }));
