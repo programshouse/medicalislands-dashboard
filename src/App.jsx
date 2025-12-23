@@ -24,6 +24,7 @@ import SettingsForm from "./pages/Settings/SettingsForm.jsx";
 // 👇 NEW: Reviews page bundle (index toggles list/form internally)
 import Reviews from "./pages/reviews";
 import ReviewDetail from "./pages/Reviews/ReviewDetail";
+import ReviewDetails from "./pages/Reviews/ReviewDetails";
 
 // GuestOnlyRoute: only guests (not logged-in)
 const GuestOnlyRoute = ({ children }) => {
@@ -66,6 +67,7 @@ const router = createBrowserRouter([
       // 👇 NEW: Reviews (list + form handled by ./pages/reviews/index.jsx)
       { path: "/reviews", element: <Reviews /> },
       { path: "/reviews/form", element: <Reviews /> },
+      { path: "/reviews/:id", element: <ReviewDetails /> },
     ],
   },
   {

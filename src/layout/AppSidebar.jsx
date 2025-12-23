@@ -85,7 +85,7 @@ const AppSidebar = () => {
                   to={nav.path}
                   className={[
                     // base
-                    "group flex items-center gap-3 rounded-xl px-3 py-2.5 transition-colors",
+                    "group flex items-center gap-3 rounded-xl px-6 mx-4 py-2.5 transition-colors",
                     // width behavior
                     wide ? "" : "lg:justify-center",
                     // colors (white text; soft bg on hover; stronger bg when active)

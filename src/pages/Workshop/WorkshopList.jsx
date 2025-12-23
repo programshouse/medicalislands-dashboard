@@ -80,14 +80,23 @@ export default function WorkshopList({ onEdit, onAdd, onShow }) {
       render: (workshop) => (
         <div className="flex gap-2">
           {workshop.video && (
-            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+            <button
+              onClick={() => window.open(workshop.video, '_blank')}
+              className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 hover:bg-blue-200 dark:hover:bg-blue-800 cursor-pointer transition-colors"
+            >
               Video
-            </span>
+            </button>
           )}
           {workshop.image && (
-            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+            <button
+              onClick={() => {
+                const imageUrl = typeof workshop.image === 'string' ? workshop.image : URL.createObjectURL(workshop.image);
+                window.open(imageUrl, '_blank');
+              }}
+              className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 hover:bg-green-200 dark:hover:bg-green-800 cursor-pointer transition-colors"
+            >
               Image
-            </span>
+            </button>
           )}
         </div>
       ),

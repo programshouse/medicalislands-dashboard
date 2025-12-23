@@ -22,14 +22,14 @@ const IconButton = ({
     default: "border border-gray-300 bg-white hover:bg-gray-50",
     edit: "border border-gray-300 bg-white hover:bg-gray-50",
     delete: "border border-red-300 bg-white hover:bg-red-50",
-    view: "border border-gray-300 bg-white hover:bg-gray-50"
+    view: "border border-brand-300 bg-white hover:bg-gray-50"
   };
   
   const iconColors = {
     default: "text-gray-600",
     edit: "text-gray-600", 
     delete: "text-red-600",
-    view: "text-gray-600"
+    view: "text-brand-300"
   };
   
   const iconSizes = {
