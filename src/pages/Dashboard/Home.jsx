@@ -68,8 +68,8 @@ export default function Home() {
   return (
     <div title="Dashboard | Prof" className="space-y-6 p-5">
       <PageHeader
-        title="ProfMSE Dashboard"
-        description="Medical Research & Biostatistics Dashboard - Dr. Mohammed Said ElSharkawy"
+        title="Medical Dashboard"
+        description=""
       />
 
       {/* Stats */}
@@ -82,14 +82,14 @@ export default function Home() {
           value={blogs?.length ?? 0}
         />
         <StatCard
-          icon={Briefcase}
+            icon={Mail}
           iconBg="bg-emerald-50 dark:bg-emerald-500/10"
           iconColor="text-emerald-600 dark:text-emerald-400"
           label="Total Services"
           value={services?.length ?? 0}
         />
         <StatCard
-          icon={Mail}
+           icon={Briefcase}
           iconBg="bg-violet-50 dark:bg-violet-500/10"
           iconColor="text-violet-600 dark:text-violet-400"
           label="Total Workshops"
