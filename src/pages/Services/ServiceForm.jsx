@@ -8,6 +8,7 @@ export default function ServiceForm({ serviceId, onSuccess }) {
     title: "",
     description: "",
     image: null, // can be File OR string url (when editing)
+    link: "",
   });
 
   const {
@@ -43,6 +44,7 @@ export default function ServiceForm({ serviceId, onSuccess }) {
         title: service.title || "",
         description: service.description || "",
         image: service.image || null, // keep url as string
+        link: service.link || "",
       });
     }
   }, [serviceId, service]);
@@ -126,6 +128,22 @@ export default function ServiceForm({ serviceId, onSuccess }) {
           rows={4}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
           required
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Link
+        </label>
+        <input
+          type="url"
+          name="link"
+          value={formData.link}
+          onChange={handleInputChange}
+          placeholder="https://example.com"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          pattern="https?://.+"
+          title="Please enter a valid URL starting with http:// or https://"
         />
       </div>
 

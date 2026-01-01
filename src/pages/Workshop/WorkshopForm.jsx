@@ -11,7 +11,8 @@ export default function WorkshopForm({ workshopId, onSuccess }) {
     title: "",
     features: "",
     video: null,
-    image: null
+    image: null,
+    link: ""
   });
   const [saving, setSaving] = useState(false);
 
@@ -28,7 +29,8 @@ export default function WorkshopForm({ workshopId, onSuccess }) {
         title: workshop.title || "",
         features: workshop.features ? workshop.features.join(', ') : "",
         video: null,
-        image: null
+        image: null,
+        link: workshop.link || ""
       });
     }
   }, [workshop, workshopId]);
@@ -86,7 +88,7 @@ export default function WorkshopForm({ workshopId, onSuccess }) {
       onCancel={handleCancel}
       submitText={saving ? "Saving..." : (workshopId ? "Update Workshop" : "Create Workshop")}
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Workshop Title *
@@ -118,6 +120,22 @@ export default function WorkshopForm({ workshopId, onSuccess }) {
         <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
           Separate multiple features with commas
         </p>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Link
+        </label>
+        <input
+          type="url"
+          name="link"
+          value={formData.link}
+          onChange={handleInputChange}
+          placeholder="https://example.com"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          pattern="https?://.+"
+          title="Please enter a valid URL starting with http:// or https://"
+        />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

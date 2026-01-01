@@ -13,6 +13,7 @@ export default function BlogFormTiny({ blogId, onSuccess, apiKey = "lmml35k9i4dy
   const [title, setTitle] = useState("");
   const [description, setDesc] = useState(""); // HTML
   const [image, setImage] = useState(null); // File or URL string
+  const [category, setCategory] = useState("");
 
   // load for edit
   useEffect(() => {
@@ -27,6 +28,7 @@ export default function BlogFormTiny({ blogId, onSuccess, apiKey = "lmml35k9i4dy
       // Handle both "description" (from API response) and "content" (for form submission)
       setDesc(selectedBlog?.description || selectedBlog?.content || "");
       setImage(selectedBlog?.image || null); // can be URL
+      setCategory(selectedBlog?.category || "");
     }
   }, [selectedBlog]);
 
@@ -47,6 +49,7 @@ export default function BlogFormTiny({ blogId, onSuccess, apiKey = "lmml35k9i4dy
       const fd = new FormData();
       fd.append("title", title.trim());
       fd.append("content", description); // API expects "content" not "description"
+      fd.append("category", category.trim());
       fd.append("is_active", "1"); // Default to active
       fd.append("user_name", admin?.name || "Admin"); // Get from auth store
 
@@ -116,6 +119,21 @@ export default function BlogFormTiny({ blogId, onSuccess, apiKey = "lmml35k9i4dy
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
         />
         <p className="text-xs text-gray-500 mt-1">{title.length}/140</p>
+      </div>
+
+      {/* Category */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Category
+        </label>
+        <input
+          type="text"
+          name="category"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          placeholder="e.g., Medical News, Health Tips, Research"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+        />
       </div>
 
       {/* Image */}
