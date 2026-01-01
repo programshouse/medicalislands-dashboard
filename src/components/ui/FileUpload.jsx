@@ -74,7 +74,7 @@ const FileUpload = ({
             />
             <div className="flex gap-2 justify-center">
               <label className="bg-brand-500 hover:bg-brand-600 text-white font-medium py-2 px-4 rounded-lg cursor-pointer transition-colors">
-                Change Image
+                Change 
                 <input
                   type="file"
                   accept={accept}
@@ -110,7 +110,7 @@ const FileUpload = ({
 
             <div className="mt-4">
               <label className="bg-brand-500 hover:bg-brand-600 text-white font-medium py-2 px-4 rounded-lg cursor-pointer transition-colors">
-                Upload Image
+                Upload 
                 <input
                   type="file"
                   accept={accept}

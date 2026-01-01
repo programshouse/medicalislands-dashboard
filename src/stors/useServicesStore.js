@@ -24,7 +24,7 @@ const extractList = (json) => {
   return [];
 };
 
-export const useServicesStore = create((set, get) => ({
+export const useServicesStore = create((set) => ({
   services: [],
   service: null,
   loading: false,
@@ -95,6 +95,7 @@ export const useServicesStore = create((set, get) => ({
         const formData = new FormData();
         formData.append("title", serviceData?.title ?? "");
         formData.append("description", serviceData?.description ?? "");
+        formData.append("link", serviceData?.link ?? "");
         formData.append("image", file);
 
         response = await fetch(`${API_URL}/services`, {
@@ -116,6 +117,7 @@ export const useServicesStore = create((set, get) => ({
           body: JSON.stringify({
             title: serviceData?.title ?? "",
             description: serviceData?.description ?? "",
+            link: serviceData?.link ?? "",
             image: null,
           }),
         });
@@ -159,6 +161,7 @@ export const useServicesStore = create((set, get) => ({
         const formData = new FormData();
         formData.append("title", serviceData?.title ?? "");
         formData.append("description", serviceData?.description ?? "");
+        formData.append("link", serviceData?.link ?? "");
         formData.append("image", file);
         formData.append("_method", "PUT"); // your backend expects this (like Postman update)
 
@@ -191,6 +194,7 @@ export const useServicesStore = create((set, get) => ({
           body: JSON.stringify({
             title: serviceData?.title ?? "",
             description: serviceData?.description ?? "",
+            link: serviceData?.link ?? "",
           }),
         });
       }

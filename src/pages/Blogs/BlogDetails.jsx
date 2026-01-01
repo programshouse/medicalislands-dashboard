@@ -110,7 +110,14 @@ export default function BlogDetails() {
             </div>
 
             {/* Blog Meta Information */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Category</h3>
+                <p className="text-gray-700 dark:text-gray-300">
+                  {selectedBlog.category || 'Uncategorized'}
+                </p>
+              </div>
+              
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Status</h3>
                 <span className={`inline-flex px-3 py-2 text-sm font-medium rounded-full ${

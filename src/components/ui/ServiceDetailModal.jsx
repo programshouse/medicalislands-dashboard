@@ -42,6 +42,23 @@ const ServiceDetailModal = ({ service, isOpen, onClose }) => {
             </p>
           </div>
 
+          {/* Link */}
+          {service.link && (
+            <div>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                Link
+              </h3>
+              <a
+                href={service.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 underline break-all"
+              >
+                {service.link}
+              </a>
+            </div>
+          )}
+
           {/* Image */}
           {service.image && (
             <div>

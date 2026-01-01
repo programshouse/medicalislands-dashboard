@@ -119,6 +119,28 @@ export default function WorkshopDetail() {
               </div>
             </div>
 
+            {/* Link */}
+            {workshop.link && (
+              <div>
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
+                  Workshop Link
+                </h3>
+                <div className="prose prose-gray dark:prose-invert max-w-none">
+                  <a
+                    href={workshop.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 underline break-all inline-flex items-center"
+                  >
+                    {workshop.link}
+                    <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            )}
+
             {/* Media Section */}
             <div>
               <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
