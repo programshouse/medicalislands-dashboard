@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { toast } from "react-toastify";
-
-const API_URL = "https://www.programshouse.com/dashboards/medical/api";
+import { API_BASE_URL } from "../config/config";
 
 export const useWorkshopStore = create((set) => ({
   workshops: [],
@@ -15,9 +14,9 @@ export const useWorkshopStore = create((set) => ({
       set({ loading: true, error: null });
       const token = localStorage.getItem("access_token");
       
-      console.log('Making request to:', `${API_URL}/workshops`);
+      console.log('Making request to:', `${API_BASE_URL}/workshops`);
       
-      const response = await fetch(`${API_URL}/workshops`, {
+      const response = await fetch(`${API_BASE_URL}/workshops`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -45,7 +44,7 @@ export const useWorkshopStore = create((set) => ({
       set({ loading: true, error: null });
       const token = localStorage.getItem("access_token");
       
-      const response = await fetch(`${API_URL}/workshops/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/workshops/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -73,7 +72,7 @@ export const useWorkshopStore = create((set) => ({
       set({ loading: true, error: null });
       const token = localStorage.getItem("access_token");
       
-      console.log('Creating workshop at:', `${API_URL}/workshops`);
+      console.log('Creating workshop at:', `${API_BASE_URL}/workshops`);
       console.log('Workshop data:', workshopData);
       
       let response;
@@ -100,7 +99,7 @@ export const useWorkshopStore = create((set) => ({
         formData.append("link", workshopData.link || "");
         formData.append("image", workshopData.image);
         
-        response = await fetch(`${API_URL}/workshops`, {
+        response = await fetch(`${API_BASE_URL}/workshops`, {
           method: "POST",
           mode: 'cors',
           headers: {
@@ -112,7 +111,7 @@ export const useWorkshopStore = create((set) => ({
         });
       } else {
         // If no image, use JSON
-        response = await fetch(`${API_URL}/workshops`, {
+        response = await fetch(`${API_BASE_URL}/workshops`, {
           method: "POST",
           mode: 'cors',
           headers: {
@@ -172,7 +171,7 @@ export const useWorkshopStore = create((set) => ({
       set({ loading: true, error: null });
       const token = localStorage.getItem("access_token");
       
-      const response = await fetch(`${API_URL}/workshops/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/workshops/${id}`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -215,7 +214,7 @@ export const useWorkshopStore = create((set) => ({
       set({ loading: true, error: null });
       const token = localStorage.getItem("access_token");
       
-      const response = await fetch(`${API_URL}/workshops/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/workshops/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

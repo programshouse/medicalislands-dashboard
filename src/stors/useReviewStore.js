@@ -1,8 +1,8 @@
 // src/stors/useReviewStore.js
 import { create } from "zustand";
 import { toast } from "react-toastify";
+import { API_BASE_URL } from "../config/config";
 
-const API_URL = "https://www.programshouse.com/dashboards/medical/api";
 const getToken = () => localStorage.getItem("access_token");
 
 const pickFile = (img) => {
@@ -35,7 +35,7 @@ export const useReviewStore = create((set) => ({
     try {
       set({ loading: true, error: null });
 
-      const response = await fetch(`${API_URL}/reviews`, {
+      const response = await fetch(`${API_BASE_URL}/reviews`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
 
@@ -57,7 +57,7 @@ export const useReviewStore = create((set) => ({
     try {
       set({ loading: true, error: null });
 
-      const response = await fetch(`${API_URL}/reviews/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/reviews/${id}`, {
         headers: {
           Authorization: `Bearer ${getToken()}`,
           "Content-Type": "application/json",
@@ -94,13 +94,13 @@ export const useReviewStore = create((set) => ({
         formData.append("user_image", file); // ✅ correct key
         formData.append("is_active", String(reviewData?.is_active ?? 1));
 
-        response = await fetch(`${API_URL}/reviews`, {
+        response = await fetch(`${API_BASE_URL}/reviews`, {
           method: "POST",
           headers: { Authorization: `Bearer ${getToken()}` },
           body: formData,
         });
       } else {
-        response = await fetch(`${API_URL}/reviews`, {
+        response = await fetch(`${API_BASE_URL}/reviews`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${getToken()}`,
@@ -156,7 +156,7 @@ updateReview: async (id, reviewData) => {
       formData.append("is_active", String(reviewData?.is_active ?? 1));
 
       // PATCH multipart like Postman
-      response = await fetch(`${API_URL}/reviews/${id}`, {
+      response = await fetch(`${API_BASE_URL}/reviews/${id}`, {
         method: "PATCH",
         headers: { Authorization: `Bearer ${getToken()}` },
         body: formData,
@@ -165,14 +165,14 @@ updateReview: async (id, reviewData) => {
       // fallback
       if (!response.ok) {
         formData.append("_method", "PATCH");
-        response = await fetch(`${API_URL}/reviews/${id}`, {
+        response = await fetch(`${API_BASE_URL}/reviews/${id}`, {
           method: "POST",
           headers: { Authorization: `Bearer ${getToken()}` },
           body: formData,
         });
       }
     } else {
-      response = await fetch(`${API_URL}/reviews/${id}`, {
+      response = await fetch(`${API_BASE_URL}/reviews/${id}`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${getToken()}`,
@@ -198,7 +198,7 @@ updateReview: async (id, reviewData) => {
     // ✅ if backend returns null/old image, refetch show endpoint once
     // (this is the safest way when API response is not updated)
     if (file && (!updatedReview?.user_image || updatedReview?.user_image === null)) {
-      const showRes = await fetch(`${API_URL}/reviews/${id}`, {
+      const showRes = await fetch(`${API_BASE_URL}/reviews/${id}`, {
         headers: {
           Authorization: `Bearer ${getToken()}`,
           "Content-Type": "application/json",
@@ -242,7 +242,7 @@ updateReview: async (id, reviewData) => {
     try {
       set({ loading: true, error: null });
 
-      const response = await fetch(`${API_URL}/reviews/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/reviews/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${getToken()}` },
       });

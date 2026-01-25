@@ -1,8 +1,7 @@
 // src/stors/useServicesStore.js
 import { create } from "zustand";
 import { toast } from "react-toastify";
-
-const API_URL = "https://www.programshouse.com/dashboards/medical/api";
+import { API_BASE_URL } from "../config/config";
 
 const getToken = () => localStorage.getItem("access_token");
 
@@ -35,7 +34,7 @@ export const useServicesStore = create((set) => ({
     try {
       set({ loading: true, error: null });
 
-      const response = await fetch(`${API_URL}/services`, {
+      const response = await fetch(`${API_BASE_URL}/services`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
 
@@ -58,7 +57,7 @@ export const useServicesStore = create((set) => ({
     try {
       set({ loading: true, error: null });
 
-      const response = await fetch(`${API_URL}/services/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/services/${id}`, {
         headers: {
           Authorization: `Bearer ${getToken()}`,
           "Content-Type": "application/json",
@@ -99,7 +98,7 @@ export const useServicesStore = create((set) => ({
         formData.append("features", JSON.stringify((serviceData?.features || "").split(',').map(f => f.trim()).filter(f => f)));
         formData.append("image", file);
 
-        response = await fetch(`${API_URL}/services`, {
+        response = await fetch(`${API_BASE_URL}/services`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${getToken()}`,
@@ -109,7 +108,7 @@ export const useServicesStore = create((set) => ({
         });
       } else {
         // fallback JSON (no file)
-        response = await fetch(`${API_URL}/services`, {
+        response = await fetch(`${API_BASE_URL}/services`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${getToken()}`,
@@ -168,7 +167,7 @@ export const useServicesStore = create((set) => ({
         formData.append("image", file);
         formData.append("_method", "PUT"); // your backend expects this (like Postman update)
 
-        response = await fetch(`${API_URL}/services/${id}`, {
+        response = await fetch(`${API_BASE_URL}/services/${id}`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${getToken()}`,
@@ -178,7 +177,7 @@ export const useServicesStore = create((set) => ({
 
         // If POST fails, try PATCH
         if (!response.ok) {
-          response = await fetch(`${API_URL}/services/${id}`, {
+          response = await fetch(`${API_BASE_URL}/services/${id}`, {
             method: "PATCH",
             headers: {
               Authorization: `Bearer ${getToken()}`,
@@ -188,7 +187,7 @@ export const useServicesStore = create((set) => ({
         }
       } else {
         // JSON (text-only)
-        response = await fetch(`${API_URL}/services/${id}`, {
+        response = await fetch(`${API_BASE_URL}/services/${id}`, {
           method: "PATCH",
           headers: {
             Authorization: `Bearer ${getToken()}`,
@@ -235,7 +234,7 @@ export const useServicesStore = create((set) => ({
     try {
       set({ loading: true, error: null });
 
-      const response = await fetch(`${API_URL}/services/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/services/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${getToken()}`,

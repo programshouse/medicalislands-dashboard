@@ -1,8 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 import { toast } from "react-toastify";
-
-const API_URL = "https://www.programshouse.com/dashboards/medical/api";
+import { API_BASE_URL, API_ENDPOINTS } from "../config/config";
 
 export const useAuthStore = create((set) => ({
   admin: null,
@@ -16,7 +15,7 @@ export const useAuthStore = create((set) => ({
     try {
       set({ loading: true, error: null });
 
-      const res = await axios.post(`${API_URL}/login`, {
+      const res = await axios.post(`${API_BASE_URL}${API_ENDPOINTS.AUTH.LOGIN}`, {
         email,
         password,
       });
@@ -44,7 +43,7 @@ export const useAuthStore = create((set) => ({
   getProfile: async () => {
     set({ loading: true, error: null });
     try {
-      const res = await axios.get(`${API_URL}/profile`, {
+      const res = await axios.get(`${API_BASE_URL}${API_ENDPOINTS.AUTH.PROFILE}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
       });
       set({ getProfile: res.data.data, loading: false });

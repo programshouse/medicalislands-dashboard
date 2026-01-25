@@ -1,12 +1,11 @@
 import { create } from "zustand";
 import axios from "axios";
-
-const API_ROOT = "https://www.programshouse.com/dashboards/medical/api";
+import { API_BASE_URL, AXIOS_CONFIG } from "../config/config";
 
 const api = axios.create({
-  baseURL: API_ROOT,
+  ...AXIOS_CONFIG,
+  baseURL: API_BASE_URL,
   timeout: 2 * 60 * 1000,
-  headers: { Accept: "application/json" },
 });
 
 const pickToken = () =>
@@ -32,7 +31,7 @@ listCategories: async (type) => {
     set({ categoriesLoading: true, categoriesError: null });
 
     // Build URL with optional ?type=...
-    const u = new URL(`${API_ROOT}/categories`);
+    const u = new URL(`${API_BASE_URL}/categories`);
     if (type && type !== "all") u.searchParams.set("type", String(type));
 
     const res = await axios.get(u.toString(), { headers: authHeader() });
@@ -129,7 +128,7 @@ listCategories: async (type) => {
   },
   deleteQuiz: async (quizId) => {
     try {
-      await axios.delete(`${API_ROOT}/quizzes/${quizId}`, {
+      await axios.delete(`${API_BASE_URL}/quizzes/${quizId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -146,7 +145,7 @@ listCategories: async (type) => {
   },
   //  Quiz: async (quizId) => {
   //   try {
-  //     await axios.patch(`${API_ROOT}/quizzes/${quizId}`, {
+  //     await axios.patch(`${API_BASE_URL}/quizzes/${quizId}`, {
   //       headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
   //     });
   //     set((state) => ({
@@ -165,7 +164,7 @@ listCategories: async (type) => {
     // payload shape should match your Postman JSON (see builder below)
     set({ loading: true, error: null });
     try {
-      const res = await api.patch(`${API_ROOT}/quizzes/${quizId}`, payload, {
+      const res = await api.patch(`${API_BASE_URL}/quizzes/${quizId}`, payload, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           Accept: "application/json",
@@ -929,7 +928,7 @@ listCategories: async (type) => {
   getAllBooks: async () => {
     set({ loading: true, error: null });
     try {
-      const res = await axios.get(`${API_ROOT}/books`, {
+      const res = await axios.get(`${API_BASE_URL}/books`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -946,7 +945,7 @@ listCategories: async (type) => {
   getAllFaqs: async () => {
     set({ loading: true, error: null });
     try {
-      const res = await axios.get(`${API_ROOT}/faqs`, {
+      const res = await axios.get(`${API_BASE_URL}/faqs`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -965,7 +964,7 @@ listCategories: async (type) => {
   fetchFaqById: async (id) => {
     set({ loading: true, error: null });
     try {
-      const res = await axios.get(`${API_ROOT}/faqs/${id}`, {
+      const res = await axios.get(`${API_BASE_URL}/faqs/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -985,7 +984,7 @@ listCategories: async (type) => {
   deleteFaq: async (id) => {
     set({ loading: true, error: null });
     try {
-      await axios.delete(`${API_ROOT}/faqs/${id}`, {
+      await axios.delete(`${API_BASE_URL}/faqs/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -1008,7 +1007,7 @@ listCategories: async (type) => {
   updateFaq: async (id, faqData) => {
     set({ loading: true, error: null });
     try {
-      const res = await axios.patch(`${API_ROOT}/faqs/${id}`, faqData, {
+      const res = await axios.patch(`${API_BASE_URL}/faqs/${id}`, faqData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -1033,7 +1032,7 @@ listCategories: async (type) => {
   getAllCoachingSessions: async () => {
     set({ loading: true, error: null });
     try {
-      const res = await axios.get(`${API_ROOT}/coaching-sessions`, {
+      const res = await axios.get(`${API_BASE_URL}/coaching-sessions`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -1054,7 +1053,7 @@ listCategories: async (type) => {
   showCoachingSession: async (id) => {
     set({ loading: true, error: null });
     try {
-      const res = await axios.get(`${API_ROOT}/coaching-sessions/${id}`, {
+      const res = await axios.get(`${API_BASE_URL}/coaching-sessions/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -1076,7 +1075,7 @@ listCategories: async (type) => {
   //   set({ loading: true, error: null });
   //   try {
   //     const res = await axios.patch(
-  //       `${API_ROOT}/coaching-sessions/${id}`,
+  //       `${API_BASE_URL}/coaching-sessions/${id}`,
   //       sessionData,
   //       {
   //         headers: {
@@ -1156,7 +1155,7 @@ updateCoachingSession: async (id, payload) => {
   deleteCoachingSession: async (id) => {
     set({ loading: true, error: null });
     try {
-      await axios.delete(`${API_ROOT}/coaching-sessions/${id}`, {
+      await axios.delete(`${API_BASE_URL}/coaching-sessions/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -1513,7 +1512,7 @@ updateBook: async (id, payload = {}) => {
   getAllApprovedTopics: async () => {
     set({ loading: true, error: null });
     try {
-      const res = await axios.get(`${API_ROOT}/topics`, {
+      const res = await axios.get(`${API_BASE_URL}/topics`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -1532,7 +1531,7 @@ updateBook: async (id, payload = {}) => {
   getAllPendingTopics: async () => {
     set({ loading: true, error: null });
     try {
-      const res = await axios.get(`${API_ROOT}/topics_admin`, {
+      const res = await axios.get(`${API_BASE_URL}/topics_admin`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -1551,7 +1550,7 @@ updateBook: async (id, payload = {}) => {
   getTopicById: async (topicId) => {
     set({ loading: true, error: null });
     try {
-      const res = await axios.get(`${API_ROOT}/topics/${topicId}`, {
+      const res = await axios.get(`${API_BASE_URL}/topics/${topicId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -1573,7 +1572,7 @@ updateBook: async (id, payload = {}) => {
     set({ loading: true, error: null });
     try {
       const res = await axios.patch(
-        `${API_ROOT}/topics/${topicId}`,
+        `${API_BASE_URL}/topics/${topicId}`,
         updatedData,
         {
           headers: {
@@ -1604,7 +1603,7 @@ updateBook: async (id, payload = {}) => {
   deleteTopic: async (topicId) => {
     set({ loading: true, error: null });
     try {
-      await axios.delete(`${API_ROOT}/topics/${topicId}`, {
+      await axios.delete(`${API_BASE_URL}/topics/${topicId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -1633,7 +1632,7 @@ updateBook: async (id, payload = {}) => {
       }
 
       const res = await axios.post(
-        `${API_ROOT}/topics/${topic.id}/approve`,
+        `${API_BASE_URL}/topics/${topic.id}/approve`,
         { category_id: topic.category.id }, // ✅ send category_id
         {
           headers: {
@@ -1669,7 +1668,7 @@ updateBook: async (id, payload = {}) => {
       }
 
       const res = await axios.post(
-        `${API_ROOT}/topics/${topic.id}/reject`,
+        `${API_BASE_URL}/topics/${topic.id}/reject`,
         { category_id: topic.category.id }, // ✅ send category_id
         {
           headers: {
@@ -1696,7 +1695,7 @@ updateBook: async (id, payload = {}) => {
   getAllBlogs: async () => {
     set({ loading: true, error: null });
     try {
-      const res = await axios.get(`${API_ROOT}/blogs`, {
+      const res = await axios.get(`${API_BASE_URL}/blogs`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -1835,7 +1834,7 @@ fetchCategories: async (type) => {
   },
   deleteCategory: async (id) => {
     try {
-      await axios.delete(`${API_ROOT}/categories/${id}`, {
+      await axios.delete(`${API_BASE_URL}/categories/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -1913,7 +1912,7 @@ fetchCategories: async (type) => {
     try {
       // مَسار بدون id
       const res = await axios.patch(
-        `${API_ROOT}/price`,
+        `${API_BASE_URL}/price`,
         { price: num, amount: num },
         {
           headers: {
@@ -1940,7 +1939,7 @@ fetchCategories: async (type) => {
   deleteCurrentPrice: async () => {
     set({ loading: true, error: null });
     try {
-        const res = await axios.delete(`${API_ROOT}/price`, {
+        const res = await axios.delete(`${API_BASE_URL}/price`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -1973,7 +1972,7 @@ updateIndividualsPrice: async (priceData) => {
   try {
     // ⬇️ adjust endpoint if your backend is different
     const res = await axios.patch(
-      `${API_ROOT}/individuals`,
+      `${API_BASE_URL}/individuals`,
       { price_year: year, price_month: month },
       {
         headers: {
@@ -2003,7 +2002,7 @@ deleteIndividualsPrice: async () => {
   set({ loading: true, error: null });
   try {
     // ⬇️ adjust endpoint if your backend is different
-    const res = await axios.delete(`${API_ROOT}/individuals`, {
+    const res = await axios.delete(`${API_BASE_URL}/individuals`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
@@ -2049,7 +2048,7 @@ deleteIndividualsPrice: async () => {
 updateUser: async (id, data) => {
   set({ loading: true, error: null });
   try {
-    const res = await axios.patch(`${API_ROOT}/users/${id}`, data, {
+    const res = await axios.patch(`${API_BASE_URL}/users/${id}`, data, {
       headers: { 
         Authorization: `Bearer ${localStorage.getItem("access_token")}` 
       },
@@ -2068,7 +2067,7 @@ updateUser: async (id, data) => {
 deleteUser: async (id) => {
   set({ loading: true, error: null });
   try {
-    const res = await axios.delete(`${API_ROOT}/users/${id}`, {
+    const res = await axios.delete(`${API_BASE_URL}/users/${id}`, {
       headers: { 
         Authorization: `Bearer ${localStorage.getItem("access_token")}` 
       },

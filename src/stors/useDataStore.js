@@ -1,8 +1,7 @@
 // src/stors/useData.js
 import { create } from "zustand";
 import axios from "axios";
-
-const API_ROOT = "https://www.programshouse.com/dashboards/medical/api/";
+import { API_BASE_URL } from "../config/config";
 
 
 
@@ -40,7 +39,7 @@ function normalizeToken(raw) {
 
 /* ================= Axios Client ================= */
 const api = axios.create({
-  baseURL: API_ROOT,
+  baseURL: API_BASE_URL,
   timeout: 2 * 60 * 1000, // 2 min
   headers: { Accept: "application/json" },
 });
@@ -450,7 +449,7 @@ createSlider: async (images) => {
     });
 
     // IMPORTANT: no double slashes
-    const root = (import.meta.env.VITE_API_ROOT || "https://www.programshouse.com/reem/api/v1").replace(/\/+$/, "");
+    const root = (import.meta.env.VITE_API_BASE_URL || "https://www.programshouse.com/reem/api/v1").replace(/\/+$/, "");
     const endpoint = "admins/sliders"; // or "slider" if that’s your route
     const url = `${root}/${endpoint}`;
 

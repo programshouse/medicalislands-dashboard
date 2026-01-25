@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
-
-const API_ROOT = "https://www.programshouse.com/dashboards/medical/api";
+import { API_BASE_URL } from "../config/config";
 
 export const useCreateStore = create((set) => ({
   loading: false,
@@ -14,7 +13,7 @@ export const useCreateStore = create((set) => ({
   createQuiz: async (quizData) => {
     set({ loading: true, error: null });
     try {
-      const res = await axios.post(`${API_ROOT}/quizzes`, quizData, {
+      const res = await axios.post(`${API_BASE_URL}/quizzes`, quizData, {
         headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
       });
       set({ createdQuiz: res.data.data, loading: false });
@@ -29,7 +28,7 @@ export const useCreateStore = create((set) => ({
   createQuestion: async (quizId, questionData) => {
     set({ loading: true, error: null });
     try {
-      const res = await axios.post(`${API_ROOT}/quizzes/${quizId}/questions`, questionData, {
+      const res = await axios.post(`${API_BASE_URL}/quizzes/${quizId}/questions`, questionData, {
         headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
       });
       set({ createdQuestion: res.data.data, loading: false });
@@ -43,7 +42,7 @@ export const useCreateStore = create((set) => ({
   set({ loading: true, error: null });
   try {
     const res = await axios.post(
-      `${API_ROOT}/main-coaching-sessions`,
+      `${API_BASE_URL}/main-coaching-sessions`,
       sessionData,
       {
         headers: {
@@ -66,7 +65,7 @@ export const useCreateStore = create((set) => ({
 createTopic: async (topicData) => {
   set({ loading: true, error: null });
   try {
-    const res = await axios.post(`${API_ROOT}/topics`, topicData, {
+    const res = await axios.post(`${API_BASE_URL}/topics`, topicData, {
       headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
     });
 
@@ -91,7 +90,7 @@ createTopic: async (topicData) => {
   createBook: async (formData) => {
     set({ loading: true, error: null, message: null, createdBook: null });
     try {
-      const res = await axios.post(`${API_ROOT}/books`, formData, {
+      const res = await axios.post(`${API_BASE_URL}/books`, formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -132,7 +131,7 @@ createBlog: async (payload) => {
             : "cover.jpg";
         fd.append("image", payload.image, filename);
 
-        res = await axios.post(`${API_ROOT}/blogs`, fd, {
+        res = await axios.post(`${API_BASE_URL}/blogs`, fd, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             Accept: "application/json",
@@ -141,7 +140,7 @@ createBlog: async (payload) => {
         });
       } else {
         // Otherwise, send JSON
-        res = await axios.post(`${API_ROOT}/blogs`, payload, {
+        res = await axios.post(`${API_BASE_URL}/blogs`, payload, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             Accept: "application/json",
@@ -169,7 +168,7 @@ createBlog: async (payload) => {
   createCategory: async (categoryData) => {
     set({ loading: true, error: null });
     try {
-      const res = await axios.post(`${API_ROOT}/categories`, categoryData, {
+      const res = await axios.post(`${API_BASE_URL}/categories`, categoryData, {
         headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
       });
       set({ createdCategory: res.data.data, loading: false });
@@ -188,7 +187,7 @@ createPrice: async (priceData) => {
   set({ loading: true, error: null });
   try {
     const res = await axios.post(
-      `${API_ROOT}/prices`,
+      `${API_BASE_URL}/prices`,
       { price: num, amount: num },
       {
         headers: {
@@ -224,7 +223,7 @@ createIndividualsPrice: async (priceData) => {
   set({ loading: true, error: null });
   try {
     const res = await axios.post(
-      `${API_ROOT}/individuals`, // ✅ adjust endpoint if needed
+      `${API_BASE_URL}/individuals`, // ✅ adjust endpoint if needed
       { price_year: year, price_month: month },
       {
         headers: {
@@ -251,7 +250,7 @@ createIndividualsPrice: async (priceData) => {
   createSheet: async (data) => {
     set({ loading: true, error: null });
     try {
-      const res = await axios.post(`${API_ROOT}/import-users`, data, {
+      const res = await axios.post(`${API_BASE_URL}/import-users`, data, {
         headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
       });
       set({ createdSheet: res.data.data, loading: false });
@@ -265,7 +264,7 @@ createIndividualsPrice: async (priceData) => {
     createUser: async (data) => {
     set({ loading: true, error: null });
     try {
-      const res = await axios.post(`${API_ROOT}/users`, data, {
+      const res = await axios.post(`${API_BASE_URL}/users`, data, {
         headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
       });
       set({ createdSheet: res.data.data, loading: false });

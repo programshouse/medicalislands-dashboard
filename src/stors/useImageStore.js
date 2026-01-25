@@ -1,8 +1,7 @@
 // src/stors/useImageStore.js
 import { create } from "zustand";
 import axios from "axios";
-
-const API_ROOT = "https://www.programshouse.com/dashboards/medical/api";
+import { API_BASE_URL } from "../config/config";
 
 /* ================= Token Helpers ================= */
 function pickRawToken() {
@@ -33,7 +32,7 @@ function normalizeToken(raw) {
 
 /* ================= Axios Client ================= */
 const api = axios.create({
-  baseURL: API_ROOT,
+  baseURL: API_BASE_URL,
   timeout: 5 * 60 * 1000,
   headers: { Accept: "application/json" },
 });
@@ -225,7 +224,7 @@ updateImageFile: async (id, file) => {
       formData.append("video", file);
       formData.append("section", section);
 
-      const res = await axios.post(`${API_ROOT}/videos/upload`, formData, {
+      const res = await axios.post(`${API_BASE_URL}/videos/upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -246,7 +245,7 @@ updateImageFile: async (id, file) => {
   getVideo: async (id) => {
     set({ loading: true, error: null });
     try {
-      const res = await axios.get(`${API_ROOT}/videos/${id}`, {
+      const res = await axios.get(`${API_BASE_URL}/videos/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
       });
       set({ selectedVideo: res.data.data, loading: false });
@@ -310,7 +309,7 @@ updateVideoFile: async (id, file) => {
   deleteVideo: async (id) => {
     set({ loading: true, error: null });
     try {
-      const res = await axios.delete(`${API_ROOT}/videos/${id}`, {
+      const res = await axios.delete(`${API_BASE_URL}/videos/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
       });
       set({ deletedVideo: id, loading: false, message: "✅ Video deleted successfully!" });
@@ -327,7 +326,7 @@ updateVideoFile: async (id, file) => {
   getAllVideos: async () => {
     set({ loading: true, message: "", error: null });
     try {
-      const res = await axios.get(`${API_ROOT}/videos`, {
+      const res = await axios.get(`${API_BASE_URL}/videos`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
       });
       const videos = res.data?.data || [];

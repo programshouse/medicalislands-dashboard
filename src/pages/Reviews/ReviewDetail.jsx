@@ -3,11 +3,12 @@ import { useParams, useNavigate } from "react-router-dom";
 import PageLayout from "../../components/ui/PageLayout";
 import PageHeader from "../../components/ui/PageHeader";
 import PageCard from "../../components/ui/PageCard";
-import { reviewsAPI } from "../../services/api";
+import { useReviewStore } from "../../stors/useReviewStore";
 
 export default function ReviewDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { getReviewById, deleteReview } = useReviewStore();
   const [review, setReview] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
@@ -16,7 +17,7 @@ export default function ReviewDetail() {
     const loadReview = async () => {
       try {
         setLoading(true);
-        const { data } = await reviewsAPI.getById(id);
+        const data = await getReviewById(id);
         setReview(data);
       } catch (error) {
         console.error("Error loading review:", error);
@@ -27,14 +28,14 @@ export default function ReviewDetail() {
     };
 
     if (id) loadReview();
-  }, [id, navigate]);
+  }, [id, navigate, getReviewById]);
 
   const handleDelete = async () => {
     if (!confirm("Are you sure you want to delete this review?")) return;
     
     try {
       setDeleting(true);
-      await reviewsAPI.delete(id);
+      await deleteReview(id);
       navigate("/reviews");
     } catch (error) {
       console.error("Error deleting review:", error);

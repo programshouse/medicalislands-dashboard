@@ -1,14 +1,11 @@
 // src/stors/useBlogStore.js
 import { create } from "zustand";
 import axios from "axios";
-
-const API_BASE_URL = "https://www.programshouse.com/dashboards/medical/api";
+import { API_BASE_URL, AXIOS_CONFIG } from "../config/config";
 
 const api = axios.create({
+  ...AXIOS_CONFIG,
   baseURL: API_BASE_URL,
-  headers: {
-    Accept: "application/json",
-  },
 });
 
 // Request interceptor to add auth token

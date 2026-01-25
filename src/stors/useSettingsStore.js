@@ -1,6 +1,5 @@
 import { create } from "zustand";
-
-const API_URL = "https://www.programshouse.com/dashboards/medical/api";
+import { API_BASE_URL } from "../config/config";
 
 const authHeaders = () => ({
   Authorization: `Bearer ${localStorage.getItem("access_token") || ""}`,
@@ -53,7 +52,7 @@ export const useSettingsStore = create((set, get) => ({
   fetchSettings: async () => {
     set({ loading: true, error: null });
     try {
-      const res = await fetch(`${API_URL}/settings`, {
+      const res = await fetch(`${API_BASE_URL}/settings`, {
         method: "GET",
         headers: jsonHeaders(),
       });
@@ -86,7 +85,7 @@ export const useSettingsStore = create((set, get) => ({
     try {
       const fd = buildFormDataFromForm(form);
 
-      const res = await fetch(`${API_URL}/settings/save`, {
+      const res = await fetch(`${API_BASE_URL}/settings/save`, {
         method: "POST",
         headers: {
           ...authHeaders(),
@@ -116,7 +115,7 @@ export const useSettingsStore = create((set, get) => ({
   deleteSettings: async () => {
     set({ loading: true, error: null });
     try {
-      const res = await fetch(`${API_URL}/settings/delete`, {
+      const res = await fetch(`${API_BASE_URL}/settings/delete`, {
         method: "DELETE",
         headers: jsonHeaders(),
       });
