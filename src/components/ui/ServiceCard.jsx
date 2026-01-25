@@ -4,6 +4,7 @@ const ServiceCard = ({
   title, 
   description, 
   image = null,
+  features = [],
   className = "" 
 }) => {
   return (
@@ -31,6 +32,28 @@ const ServiceCard = ({
         <p className="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
           {description}
         </p>
+        
+        {/* Features Preview */}
+        {features && features.length > 0 && (
+          <div className="mb-4">
+            <div className="flex flex-wrap gap-2">
+              {features.slice(0, 3).map((feature, index) => (
+                <span 
+                  key={index}
+                  className="inline-block bg-brand-100 dark:bg-brand-900 text-brand-800 dark:text-brand-200 text-xs px-2 py-1 rounded-full"
+                >
+                  {feature}
+                </span>
+              ))}
+              {features.length > 3 && (
+                <span className="inline-block text-gray-500 dark:text-gray-400 text-xs px-2 py-1">
+                  +{features.length - 3} more
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+        
         <button className="w-full bg-brand-500 hover:bg-brand-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
           Get Service
         </button>

@@ -98,6 +98,20 @@ export default function WorkshopDetail() {
 
           {/* Content Sections */}
           <div className="p-6 space-y-8">
+            {/* Description */}
+            {workshop.description && (
+              <div>
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
+                  Description
+                </h3>
+                <div className="prose prose-gray dark:prose-invert max-w-none">
+                  <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
+                    {workshop.description}
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Features */}
             <div>
               <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">

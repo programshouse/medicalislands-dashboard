@@ -47,6 +47,33 @@ export default function ServiceList({ onEdit, onAdd, onShow }) {
         </div>
       ),
     },
+    // {
+    //   key: "features",
+    //   header: "Features",
+    //   render: (service) => (
+    //     <div className="max-w-xs">
+    //       {service.features && service.features.length > 0 ? (
+    //         <div className="flex flex-wrap gap-1">
+    //           {service.features.slice(0, 2).map((feature, index) => (
+    //             <span
+    //               key={index}
+    //               className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-brand-100 text-brand-800 dark:bg-brand-900 dark:text-brand-200"
+    //             >
+    //               {feature}
+    //             </span>
+    //           ))}
+    //           {service.features.length > 2 && (
+    //             <span className="text-xs text-gray-500 dark:text-gray-400">
+    //               +{service.features.length - 2} more
+    //             </span>
+    //           )}
+    //         </div>
+    //       ) : (
+    //         <span className="text-gray-400 dark:text-gray-500">No features</span>
+    //       )}
+    //     </div>
+    //   ),
+    // },
     {
       key: "image",
       header: "Image",

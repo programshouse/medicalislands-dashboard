@@ -9,6 +9,7 @@ export default function WorkshopForm({ workshopId, onSuccess }) {
   const { workshop, loading, getWorkshopById, createWorkshop, updateWorkshop, clearWorkshop } = useWorkshopStore();
   const [formData, setFormData] = useState({
     title: "",
+    description: "",
     features: "",
     video: null,
     image: null,
@@ -27,6 +28,7 @@ export default function WorkshopForm({ workshopId, onSuccess }) {
     if (workshop && workshopId) {
       setFormData({
         title: workshop.title || "",
+        description: workshop.description || "",
         features: workshop.features ? workshop.features.join(', ') : "",
         video: null,
         image: null,
@@ -102,6 +104,21 @@ export default function WorkshopForm({ workshopId, onSuccess }) {
             required
           />
         </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Description *
+        </label>
+        <textarea
+          name="description"
+          value={formData.description}
+          onChange={handleInputChange}
+          rows={4}
+          placeholder="Enter a detailed description of the workshop..."
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          required
+        />
       </div>
 
       <div>

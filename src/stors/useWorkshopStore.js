@@ -82,6 +82,7 @@ export const useWorkshopStore = create((set) => ({
       if (workshopData.image && workshopData.image instanceof File) {
         const formData = new FormData();
         formData.append("title", workshopData.title || "");
+        formData.append("description", workshopData.description || "");
         
         // Handle features as an array for FormData
         const featuresArray = Array.isArray(workshopData.features) 
@@ -121,6 +122,7 @@ export const useWorkshopStore = create((set) => ({
           },
           body: JSON.stringify({
             title: workshopData.title || "",
+            description: workshopData.description || "",
             features: Array.isArray(workshopData.features) 
               ? workshopData.features 
               : workshopData.features.split(',').map(f => f.trim()).filter(f => f),

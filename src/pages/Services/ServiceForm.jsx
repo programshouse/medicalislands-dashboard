@@ -9,6 +9,7 @@ export default function ServiceForm({ serviceId, onSuccess }) {
     description: "",
     image: null, // can be File OR string url (when editing)
     link: "",
+    features: "",
   });
 
   const {
@@ -45,6 +46,7 @@ export default function ServiceForm({ serviceId, onSuccess }) {
         description: service.description || "",
         image: service.image || null, // keep url as string
         link: service.link || "",
+        features: service.features ? service.features.join(', ') : "",
       });
     }
   }, [serviceId, service]);
@@ -129,6 +131,24 @@ export default function ServiceForm({ serviceId, onSuccess }) {
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
           required
         />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Features *
+        </label>
+        <textarea
+          name="features"
+          value={formData.features}
+          onChange={handleInputChange}
+          rows={3}
+          placeholder="Enter service features separated by commas (e.g., 24/7 Support, Expert Staff, Advanced Technology)"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          required
+        />
+        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+          Separate multiple features with commas
+        </p>
       </div>
 
       <div>

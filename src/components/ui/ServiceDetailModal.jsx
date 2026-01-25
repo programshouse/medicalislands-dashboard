@@ -42,6 +42,22 @@ const ServiceDetailModal = ({ service, isOpen, onClose }) => {
             </p>
           </div>
 
+          {/* Features */}
+          {service.features && service.features.length > 0 && (
+            <div>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                Features
+              </h3>
+              <ul className="list-disc list-inside space-y-1">
+                {service.features.map((feature, index) => (
+                  <li key={index} className="text-gray-700 dark:text-gray-300">
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           {/* Link */}
           {service.link && (
             <div>

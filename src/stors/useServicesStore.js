@@ -96,6 +96,7 @@ export const useServicesStore = create((set) => ({
         formData.append("title", serviceData?.title ?? "");
         formData.append("description", serviceData?.description ?? "");
         formData.append("link", serviceData?.link ?? "");
+        formData.append("features", JSON.stringify((serviceData?.features || "").split(',').map(f => f.trim()).filter(f => f)));
         formData.append("image", file);
 
         response = await fetch(`${API_URL}/services`, {
@@ -118,6 +119,7 @@ export const useServicesStore = create((set) => ({
             title: serviceData?.title ?? "",
             description: serviceData?.description ?? "",
             link: serviceData?.link ?? "",
+            features: (serviceData?.features || "").split(',').map(f => f.trim()).filter(f => f),
             image: null,
           }),
         });
@@ -162,6 +164,7 @@ export const useServicesStore = create((set) => ({
         formData.append("title", serviceData?.title ?? "");
         formData.append("description", serviceData?.description ?? "");
         formData.append("link", serviceData?.link ?? "");
+        formData.append("features", JSON.stringify((serviceData?.features || "").split(',').map(f => f.trim()).filter(f => f)));
         formData.append("image", file);
         formData.append("_method", "PUT"); // your backend expects this (like Postman update)
 
@@ -195,6 +198,7 @@ export const useServicesStore = create((set) => ({
             title: serviceData?.title ?? "",
             description: serviceData?.description ?? "",
             link: serviceData?.link ?? "",
+            features: (serviceData?.features || "").split(',').map(f => f.trim()).filter(f => f),
           }),
         });
       }

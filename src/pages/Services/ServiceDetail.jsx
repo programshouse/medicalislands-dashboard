@@ -106,6 +106,24 @@ export default function ServiceDetail() {
               </div>
             </div>
 
+            {/* Features */}
+            {service.features && service.features.length > 0 && (
+              <div>
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">
+                  Features
+                </h3>
+                <div className="prose prose-gray dark:prose-invert max-w-none">
+                  <ul className="list-disc list-inside space-y-2">
+                    {service.features.map((feature, index) => (
+                      <li key={index} className="text-gray-700 dark:text-gray-300">
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+
             {/* Link */}
             {service.link && (
               <div>
