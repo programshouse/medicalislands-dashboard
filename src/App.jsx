@@ -22,7 +22,7 @@ import Settings from "./pages/Settings/SettingsList.jsx";
 import SettingsForm from "./pages/Settings/SettingsForm.jsx";
 
 // 👇 NEW: Reviews page bundle (index toggles list/form internally)
-import Reviews from "./pages/reviews";
+import Reviews from "./pages/Reviews";
 import ReviewDetail from "./pages/Reviews/ReviewDetail";
 import ReviewDetails from "./pages/Reviews/ReviewDetails";
 
@@ -64,7 +64,7 @@ const router = createBrowserRouter([
       // Demo card page
       { path: "/card", element: <Card /> },
 
-      // 👇 NEW: Reviews (list + form handled by ./pages/reviews/index.jsx)
+      // 👇 NEW: Reviews (list + form handled by ./pages/Reviews/index.jsx)
       { path: "/reviews", element: <Reviews /> },
       { path: "/reviews/form", element: <Reviews /> },
       { path: "/reviews/:id", element: <ReviewDetails /> },
