@@ -12,7 +12,6 @@ Modern React + Tailwind CSS professional dashboard for Prof services and managem
 - Easy customization
 
 ## Getting Started
-
 ### Prerequisites
 
 - Node.js 18.x or newer (Node.js 20.x recommended)
