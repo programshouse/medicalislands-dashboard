@@ -2,6 +2,7 @@
 import { create } from "zustand";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../config/config";
+import { saveMultipart } from "./multipartRequest";
 
 const getToken = () => localStorage.getItem("access_token");
 
@@ -78,153 +79,34 @@ export const useServicesStore = create((set) => ({
     }
   },
 
-  // ✅ Create service (FormData like Postman: title, description, image)
   createService: async (serviceData) => {
+    set({ loading: true, error: null });
     try {
-      set({ loading: true, error: null });
-
-      const file = pickFile(serviceData?.image);
-      console.log("serviceData:", serviceData);
-      console.log("picked file:", file);
-      console.log("image type:", typeof serviceData?.image, serviceData?.image?.constructor?.name);
-      
-      let response;
-
-      if (file) {
-        const formData = new FormData();
-        formData.append("title", serviceData?.title ?? "");
-        formData.append("description", serviceData?.description ?? "");
-        formData.append("link", serviceData?.link ?? "");
-        formData.append("features", JSON.stringify((serviceData?.features || "").split(',').map(f => f.trim()).filter(f => f)));
-        formData.append("image", file);
-
-        response = await fetch(`${API_BASE_URL}/services`, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${getToken()}`,
-            // ✅ DO NOT set Content-Type with FormData
-          },
-          body: formData,
-        });
-      } else {
-        // fallback JSON (no file)
-        response = await fetch(`${API_BASE_URL}/services`, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${getToken()}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            title: serviceData?.title ?? "",
-            description: serviceData?.description ?? "",
-            link: serviceData?.link ?? "",
-            features: (serviceData?.features || "").split(',').map(f => f.trim()).filter(f => f),
-            image: null,
-          }),
-        });
-      }
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(
-          `Failed to create service: ${response.status} ${errorText}`
-        );
-      }
-
-      const json = await response.json();
-      const createdService = extractData(json);
-
-      set((state) => ({
-        services: [createdService, ...(state.services || [])],
-        service: createdService,
-        loading: false,
-      }));
-
+      const createdService = await saveMultipart("services", serviceData);
+      set(state => ({ services: [createdService, ...state.services], service: createdService, loading: false }));
       toast.success("Service created successfully!");
       return createdService;
     } catch (err) {
-      set({ error: err.message || "Failed to create service", loading: false });
-      toast.error(err.message || "Failed to create service");
+      set({ error: err.message, loading: false });
+      toast.error(err.message);
       throw err;
     }
   },
 
-  // ✅ Update service
   updateService: async (id, serviceData) => {
+    set({ loading: true, error: null });
     try {
-      set({ loading: true, error: null });
-
-      const file = pickFile(serviceData?.image);
-      let response;
-
-      if (file) {
-        // FormData (file upload)
-        const formData = new FormData();
-        formData.append("title", serviceData?.title ?? "");
-        formData.append("description", serviceData?.description ?? "");
-        formData.append("link", serviceData?.link ?? "");
-        formData.append("features", JSON.stringify((serviceData?.features || "").split(',').map(f => f.trim()).filter(f => f)));
-        formData.append("image", file);
-        formData.append("_method", "PUT"); // your backend expects this (like Postman update)
-
-        response = await fetch(`${API_BASE_URL}/services/${id}`, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${getToken()}`,
-          },
-          body: formData,
-        });
-
-        // If POST fails, try PATCH
-        if (!response.ok) {
-          response = await fetch(`${API_BASE_URL}/services/${id}`, {
-            method: "PATCH",
-            headers: {
-              Authorization: `Bearer ${getToken()}`,
-            },
-            body: formData,
-          });
-        }
-      } else {
-        // JSON (text-only)
-        response = await fetch(`${API_BASE_URL}/services/${id}`, {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${getToken()}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            title: serviceData?.title ?? "",
-            description: serviceData?.description ?? "",
-            link: serviceData?.link ?? "",
-            features: (serviceData?.features || "").split(',').map(f => f.trim()).filter(f => f),
-          }),
-        });
-      }
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(
-          `Failed to update service: ${response.status} ${errorText}`
-        );
-      }
-
-      const json = await response.json();
-      const updatedService = extractData(json);
-
-      set((state) => ({
-        services: (state.services || []).map((s) =>
-          s.id === id ? updatedService : s
-        ),
-        service: state.service?.id === id ? updatedService : state.service,
+      const updatedService = await saveMultipart("services", serviceData, id);
+      set(state => ({
+        services: state.services.map(s => String(s.id) === String(id) ? updatedService : s),
+        service: updatedService,
         loading: false,
       }));
-
       toast.success("Service updated successfully!");
       return updatedService;
     } catch (err) {
-      set({ error: err.message || "Failed to update service", loading: false });
-      toast.error(err.message || "Failed to update service");
+      set({ error: err.message, loading: false });
+      toast.error(err.message);
       throw err;
     }
   },

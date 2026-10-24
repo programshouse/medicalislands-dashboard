@@ -31,7 +31,7 @@ export default function WorkshopForm({ workshopId, onSuccess }) {
         description: workshop.description || "",
         features: workshop.features ? workshop.features.join(', ') : "",
         video: null,
-        image: null,
+        image: workshop.image || null,
         link: workshop.link || ""
       });
     }
@@ -46,10 +46,10 @@ export default function WorkshopForm({ workshopId, onSuccess }) {
   };
 
   const handleFileChange = (e) => {
-    const { name, files } = e.target;
+    const { name, files, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: files && files.length > 0 ? files[0] : null
+      [name]: files?.[0] || (value instanceof File ? value : null)
     }));
   };
 

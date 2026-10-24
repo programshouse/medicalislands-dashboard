@@ -37,10 +37,7 @@ const FileUpload = ({
     const file = e?.target?.files?.[0] ?? null;
 
     if (file) {
-      // preview will be handled by effect after parent updates value,
-      // but we can set it immediately for snappy UI
-      const objectUrl = URL.createObjectURL(file);
-      setPreview(objectUrl);
+      // Preview is created in the effect and revoked when the value changes.
 
       // ✅ IMPORTANT: pass File in target.value (your form expects this shape)
       onChange?.({
@@ -67,11 +64,11 @@ const FileUpload = ({
       <div className="border-2 border-dashed border-gray-300  rounded-lg p-6 text-center hover:border-brand-500 transition-colors">
         {preview ? (
           <div className="space-y-4">
-            <img
-              src={preview}
-              alt="Preview"
-              className="mx-auto h-32 w-auto object-cover rounded-lg"
-            />
+            {accept.includes("video") ? (
+              <video src={preview} controls preload="metadata" className="mx-auto h-32 max-w-full rounded-lg" />
+            ) : (
+              <img src={preview} alt="Preview" className="mx-auto h-32 w-auto object-cover rounded-lg" />
+            )}
             <div className="flex gap-2 justify-center">
               <label className="bg-brand-500 hover:bg-brand-600 text-white font-medium py-2 px-4 rounded-lg cursor-pointer transition-colors">
                 Change 
