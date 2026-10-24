@@ -8,7 +8,7 @@ import { useSettingsStore } from "../../stors/useSettingsStore";
 const SocialRow = React.memo(function SocialRow({ label, value, onChange, disabled }) {
   return (
     <div className="flex items-center gap-3">
-      <span className="flex h-10 w-28 items-center justify-start text-sm font-medium text-gray-700 dark:text-gray-300">
+      <span className="flex h-10 w-28 items-center justify-start text-sm font-medium text-gray-700 ">
         {label}
       </span>
 
@@ -16,9 +16,9 @@ const SocialRow = React.memo(function SocialRow({ label, value, onChange, disabl
         type="url"
         inputMode="url"
         placeholder="https://"
-        className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white ${
+        className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent    ${
           disabled
-            ? "bg-gray-100 dark:bg-gray-800 cursor-not-allowed border-gray-200 dark:border-gray-700"
+            ? "bg-gray-100  cursor-not-allowed border-gray-200 "
             : "border-gray-300"
         }`}
         value={value}
@@ -137,10 +137,10 @@ export default function SettingsForm({ onSuccess }) {
   };
 
   const inputCls =
-    "w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white";
+    "w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent   ";
 
   const disabledCls = isReadOnly
-    ? "bg-gray-100 dark:bg-gray-800 cursor-not-allowed border-gray-200 dark:border-gray-700"
+    ? "bg-gray-100  cursor-not-allowed border-gray-200 "
     : "border-gray-300";
 
   const validationHint = useMemo(() => {
@@ -159,7 +159,7 @@ export default function SettingsForm({ onSuccess }) {
         <PageHeader title={`${isReadOnly ? "View" : "Edit"} Settings`} />
 
         {loading && (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 text-center">
+          <div className="bg-white  rounded-lg shadow-sm border border-gray-200  p-6 text-center">
             Loading settings…
           </div>
         )}
@@ -176,7 +176,7 @@ export default function SettingsForm({ onSuccess }) {
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-700  mb-2">
                   Site Name *
                 </label>
                 <input
@@ -192,7 +192,7 @@ export default function SettingsForm({ onSuccess }) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-700  mb-2">
                   Email *
                 </label>
                 <input
@@ -206,7 +206,7 @@ export default function SettingsForm({ onSuccess }) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-700  mb-2">
                   Phone *
                 </label>
                 <input
@@ -220,7 +220,7 @@ export default function SettingsForm({ onSuccess }) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-700  mb-2">
                   Address *
                 </label>
                 <input
@@ -235,7 +235,7 @@ export default function SettingsForm({ onSuccess }) {
             </div>
 
             <div className="mt-6 space-y-4">
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-sm font-semibold text-gray-900 ">
                 Social Links
               </h3>
 
@@ -272,7 +272,7 @@ export default function SettingsForm({ onSuccess }) {
             </div>
 
             {!isReadOnly && !valid && (
-              <div className="mt-4 text-sm text-amber-600 dark:text-amber-400">
+              <div className="mt-4 text-sm text-amber-600 ">
                 {validationHint}
               </div>
             )}

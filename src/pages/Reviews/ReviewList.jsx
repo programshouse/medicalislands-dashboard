@@ -38,9 +38,9 @@ export default function ReviewList({ onAdd, onEdit, onEditComplete }) {
       <PageLayout title="Reviews | ProfMSE">
         <PageHeader title="Reviews" description="What people say about you" />
         <div className="col-span-12">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 text-center">
+          <div className="bg-white  rounded-lg shadow-sm border border-gray-200  p-6 text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500 mx-auto"></div>
-            <p className="mt-2 text-gray-600 dark:text-gray-300">Loading reviews...</p>
+            <p className="mt-2 text-gray-600 ">Loading reviews...</p>
           </div>
         </div>
       </PageLayout>
@@ -62,7 +62,7 @@ export default function ReviewList({ onAdd, onEdit, onEditComplete }) {
           </div>
 
           {reviews.length === 0 ? (
-            <div className="text-center text-gray-600 dark:text-gray-300 py-10">
+            <div className="text-center text-gray-600  py-10">
               No reviews yet.
             </div>
           ) : (
@@ -70,7 +70,7 @@ export default function ReviewList({ onAdd, onEdit, onEditComplete }) {
   {reviews.map((r) => (
     <div
       key={r.id}
-      className="rounded-xl border border-gray-200 dark:border-gray-700 p-4 bg-white dark:bg-gray-800"
+      className="rounded-xl border border-gray-200  p-4 bg-white "
     >
       <div className="flex flex-col gap-3">
         {/* Row 1: Avatar + Actions */}
@@ -88,9 +88,9 @@ export default function ReviewList({ onAdd, onEdit, onEditComplete }) {
               className="w-12 h-12 rounded-full object-cover border"
             />
           ) : (
-            <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-600 border border-gray-300 dark:border-gray-500 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full bg-gray-200  border border-gray-300  flex items-center justify-center">
               <svg
-                className="w-6 h-6 text-brand-400 dark:text-gray-300"
+                className="w-6 h-6 text-brand-400 "
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
@@ -110,7 +110,7 @@ export default function ReviewList({ onAdd, onEdit, onEditComplete }) {
               title="View Details"
             >
               <svg
-                className="w-4 h-4 text-brand-300 dark:text-gray-400"
+                className="w-4 h-4 text-brand-300 "
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -136,7 +136,7 @@ export default function ReviewList({ onAdd, onEdit, onEditComplete }) {
 
             <button
               onClick={() => handleDelete(r)}
-              className="p-2 rounded-md border border-red-300 dark:border-red-600 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+              className="p-2 rounded-md border border-red-300  text-red-600  hover:bg-red-50 "
               title="Delete"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -152,12 +152,12 @@ export default function ReviewList({ onAdd, onEdit, onEditComplete }) {
         </div>
 
         {/* Row 2: Name (second line) */}
-        <div className="font-semibold text-gray-900 dark:text-white leading-tight">
+        <div className="font-semibold text-gray-900  leading-tight">
           {r.user_name || "Unnamed"}
         </div>
       </div>
 
-      {/* <p className="mt-3 text-sm text-gray-700 dark:text-gray-300 line-clamp-5">{r.review}</p> */}
+      {/* <p className="mt-3 text-sm text-gray-700  line-clamp-5">{r.review}</p> */}
     </div>
   ))}
 </div>

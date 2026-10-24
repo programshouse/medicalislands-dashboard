@@ -53,9 +53,9 @@ export default function ReviewDetail() {
       <PageLayout title="Review Detail | ProfMSE">
         <PageHeader title="Review Detail" description="Loading review information..." />
         <div className="col-span-12">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 text-center">
+          <div className="bg-white  rounded-lg shadow-sm border border-gray-200  p-6 text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500 mx-auto"></div>
-            <p className="mt-2 text-gray-600 dark:text-gray-300">Loading review...</p>
+            <p className="mt-2 text-gray-600 ">Loading review...</p>
           </div>
         </div>
       </PageLayout>
@@ -69,7 +69,7 @@ export default function ReviewDetail() {
         <div className="col-span-12">
           <PageCard title="Error">
             <div className="text-center py-10">
-              <p className="text-gray-600 dark:text-gray-300 mb-4">Review not found.</p>
+              <p className="text-gray-600  mb-4">Review not found.</p>
               <button
                 onClick={() => navigate("/reviews")}
                 className="bg-brand-600 hover:bg-brand-700 text-white font-medium py-2 px-4 rounded-lg"
@@ -111,32 +111,32 @@ export default function ReviewDetail() {
                   <img
                     src={typeof review.image === "string" ? review.image : URL.createObjectURL(review.image)}
                     alt={review.name || "Reviewer"}
-                    className="w-full h-48 object-cover rounded-lg border border-gray-200 dark:border-gray-700"
+                    className="w-full h-48 object-cover rounded-lg border border-gray-200 "
                   />
                 </div>
               )}
               
-              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Reviewer Info</h3>
+              <div className="bg-gray-50  rounded-lg p-4">
+                <h3 className="font-semibold text-gray-900  mb-3">Reviewer Info</h3>
                 <div className="space-y-2">
                   <div>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">Name:</span>
-                    <p className="font-medium text-gray-900 dark:text-white">{review.name || "Unnamed"}</p>
+                    <span className="text-sm text-gray-500 ">Name:</span>
+                    <p className="font-medium text-gray-900 ">{review.name || "Unnamed"}</p>
                   </div>
                   {review.user_job && (
                     <div>
-                      <span className="text-sm text-gray-500 dark:text-gray-400">Job Title:</span>
-                      <p className="font-medium text-gray-900 dark:text-white">{review.user_job}</p>
+                      <span className="text-sm text-gray-500 ">Job Title:</span>
+                      <p className="font-medium text-gray-900 ">{review.user_job}</p>
                     </div>
                   )}
                   {review.is_active !== undefined && (
                     <div>
-                      <span className="text-sm text-gray-500 dark:text-gray-400">Status:</span>
+                      <span className="text-sm text-gray-500 ">Status:</span>
                       <p className="font-medium">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                           review.is_active 
-                            ? "bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100" 
-                            : "bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100"
+                            ? "bg-green-100 text-green-800  "
+                            : "bg-red-100 text-red-800  "
                         }`}>
                           {review.is_active ? "Active" : "Inactive"}
                         </span>
@@ -148,27 +148,27 @@ export default function ReviewDetail() {
             </div>
 
             <div className="lg:col-span-2">
-              <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Review Content</h3>
-                <div className="prose dark:prose-invert max-w-none">
-                  <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+              <div className="bg-white  rounded-lg border border-gray-200  p-6">
+                <h3 className="font-semibold text-gray-900  mb-4">Review Content</h3>
+                <div className="prose  max-w-none">
+                  <p className="text-gray-700  whitespace-pre-wrap">
                     {review.description || review.review || "No review content available."}
                   </p>
                 </div>
               </div>
 
-              <div className="mt-6 bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Timestamps</h3>
+              <div className="mt-6 bg-gray-50  rounded-lg p-4">
+                <h3 className="font-semibold text-gray-900  mb-3">Timestamps</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">Created:</span>
-                    <p className="font-medium text-gray-900 dark:text-white">
+                    <span className="text-sm text-gray-500 ">Created:</span>
+                    <p className="font-medium text-gray-900 ">
                       {review.created_at ? new Date(review.created_at).toLocaleString() : "Unknown"}
                     </p>
                   </div>
                   <div>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">Last Updated:</span>
-                    <p className="font-medium text-gray-900 dark:text-white">
+                    <span className="text-sm text-gray-500 ">Last Updated:</span>
+                    <p className="font-medium text-gray-900 ">
                       {review.updated_at ? new Date(review.updated_at).toLocaleString() : "Never"}
                     </p>
                   </div>

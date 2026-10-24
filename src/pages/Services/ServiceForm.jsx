@@ -87,9 +87,9 @@ export default function ServiceForm({ serviceId, onSuccess }) {
 
   if (loading) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 text-center">
+      <div className="bg-white  rounded-lg shadow-sm border border-gray-200  p-6 text-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500 mx-auto" />
-        <p className="mt-2 text-gray-600 dark:text-gray-300">
+        <p className="mt-2 text-gray-600 ">
           Loading service...
         </p>
       </div>
@@ -106,7 +106,7 @@ export default function ServiceForm({ serviceId, onSuccess }) {
       }
     >
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label className="block text-sm font-medium text-gray-700  mb-2">
           Service Title *
         </label>
         <input
@@ -114,13 +114,13 @@ export default function ServiceForm({ serviceId, onSuccess }) {
           name="title"
           value={formData.title}
           onChange={handleInputChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent   "
           required
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label className="block text-sm font-medium text-gray-700  mb-2">
           Description *
         </label>
         <textarea
@@ -128,13 +128,13 @@ export default function ServiceForm({ serviceId, onSuccess }) {
           value={formData.description}
           onChange={handleInputChange}
           rows={4}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent   "
           required
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label className="block text-sm font-medium text-gray-700  mb-2">
           Features *
         </label>
         <textarea
@@ -143,16 +143,16 @@ export default function ServiceForm({ serviceId, onSuccess }) {
           onChange={handleInputChange}
           rows={3}
           placeholder="Enter service features separated by commas (e.g., 24/7 Support, Expert Staff, Advanced Technology)"
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent   "
           required
         />
-        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+        <p className="mt-1 text-xs text-gray-500 ">
           Separate multiple features with commas
         </p>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label className="block text-sm font-medium text-gray-700  mb-2">
           Link
         </label>
         <input
@@ -161,7 +161,7 @@ export default function ServiceForm({ serviceId, onSuccess }) {
           value={formData.link}
           onChange={handleInputChange}
           placeholder="https://example.com"
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent   "
           pattern="https?://.+"
           title="Please enter a valid URL starting with http:// or https://"
         />

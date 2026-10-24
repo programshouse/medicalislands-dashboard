@@ -57,19 +57,19 @@ export default function ServiceList({ onEdit, onAdd, onShow }) {
     //           {service.features.slice(0, 2).map((feature, index) => (
     //             <span
     //               key={index}
-    //               className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-brand-100 text-brand-800 dark:bg-brand-900 dark:text-brand-200"
+    //               className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-brand-100 text-brand-800  "
     //             >
     //               {feature}
     //             </span>
     //           ))}
     //           {service.features.length > 2 && (
-    //             <span className="text-xs text-gray-500 dark:text-gray-400">
+    //             <span className="text-xs text-gray-500 ">
     //               +{service.features.length - 2} more
     //             </span>
     //           )}
     //         </div>
     //       ) : (
-    //         <span className="text-gray-400 dark:text-gray-500">No features</span>
+    //         <span className="text-gray-400 ">No features</span>
     //       )}
     //     </div>
     //   ),
@@ -98,9 +98,9 @@ export default function ServiceList({ onEdit, onAdd, onShow }) {
           description="Manage services that appear on the website"
         />
         <div className="col-span-12">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 text-center">
+          <div className="bg-white  rounded-lg shadow-sm border border-gray-200  p-6 text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500 mx-auto" />
-            <p className="mt-2 text-gray-600 dark:text-gray-300">
+            <p className="mt-2 text-gray-600 ">
               Loading services...
             </p>
           </div>

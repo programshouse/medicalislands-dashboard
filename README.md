@@ -7,7 +7,6 @@ Modern React + Tailwind CSS professional dashboard for Prof services and managem
 - React 19, TypeScript, Tailwind CSS
 - Modular components: sidebar, charts, tables, forms, authentication, profile, 404 page
 - Data visualization (ApexCharts)
-- Dark mode support
 - Responsive and accessible UI
 - Easy customization
 

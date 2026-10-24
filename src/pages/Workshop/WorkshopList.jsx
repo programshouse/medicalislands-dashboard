@@ -57,19 +57,19 @@ export default function WorkshopList({ onEdit, onAdd, onShow }) {
               {workshop.features.slice(0, 2).map((feature, index) => (
                 <span
                   key={index}
-                  className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                  className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800  "
                 >
                   {feature}
                 </span>
               ))}
               {workshop.features.length > 2 && (
-                <span className="text-xs text-gray-500 dark:text-gray-400">
+                <span className="text-xs text-gray-500 ">
                   +{workshop.features.length - 2} more
                 </span>
               )}
             </div>
           ) : (
-            <span className="text-gray-400 dark:text-gray-500">No features</span>
+            <span className="text-gray-400 ">No features</span>
           )}
         </div>
       ),
@@ -82,7 +82,7 @@ export default function WorkshopList({ onEdit, onAdd, onShow }) {
           {workshop.video && (
             <button
               onClick={() => window.open(workshop.video, '_blank')}
-              className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 hover:bg-blue-200 dark:hover:bg-blue-800 cursor-pointer transition-colors"
+              className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800   hover:bg-blue-200  cursor-pointer transition-colors"
             >
               Video
             </button>
@@ -93,7 +93,7 @@ export default function WorkshopList({ onEdit, onAdd, onShow }) {
                 const imageUrl = typeof workshop.image === 'string' ? workshop.image : URL.createObjectURL(workshop.image);
                 window.open(imageUrl, '_blank');
               }}
-              className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 hover:bg-green-200 dark:hover:bg-green-800 cursor-pointer transition-colors"
+              className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800   hover:bg-green-200  cursor-pointer transition-colors"
             >
               Image
             </button>
@@ -111,9 +111,9 @@ export default function WorkshopList({ onEdit, onAdd, onShow }) {
           description="Manage workshops that appear on the website"
         />
         <div className="col-span-12">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 text-center">
+          <div className="bg-white  rounded-lg shadow-sm border border-gray-200  p-6 text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500 mx-auto"></div>
-            <p className="mt-2 text-gray-600 dark:text-gray-300">Loading workshops...</p>
+            <p className="mt-2 text-gray-600 ">Loading workshops...</p>
           </div>
         </div>
       </PageLayout>

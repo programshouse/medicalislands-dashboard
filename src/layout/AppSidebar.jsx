@@ -45,7 +45,7 @@ const AppSidebar = () => {
     <aside
       className={`fixed top-0 left-0 z-50 mt-16 flex h-screen flex-col border-r border-brand-800
         bg-brand-600 text-white transition-all duration-300 ease-in-out lg:mt-0
-        dark:bg-[#0a2235] dark:border-[#0d2a42]
+
         ${wide ? "w-[290px]" : "w-[90px]"}
         ${isMobileOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
       onMouseEnter={() => !isExpanded && setIsHovered(true)}

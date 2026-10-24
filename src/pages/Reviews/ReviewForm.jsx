@@ -88,15 +88,15 @@ export default function ReviewForm({ reviewId, onSuccess }) {
       submitDisabled={loading || !user_name.trim() || !review_text.trim()}
     >
       {loading && (
-        <div className="mb-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 text-center">
+        <div className="mb-4 bg-white  rounded-lg border border-gray-200  p-4 text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500 mx-auto"></div>
-          <p className="mt-2 text-gray-600 dark:text-gray-300">Loading review…</p>
+          <p className="mt-2 text-gray-600 ">Loading review…</p>
         </div>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-gray-700  mb-2">
             User Name *
           </label>
           <input
@@ -104,14 +104,14 @@ export default function ReviewForm({ reviewId, onSuccess }) {
             onChange={(e) => setUserName(e.target.value)}
             maxLength={120}
             placeholder="Reviewer name…"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent   "
             required
           />
           <p className="text-xs text-gray-500 mt-1">{user_name.length}/120</p>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-gray-700  mb-2">
             User Job
           </label>
           <input
@@ -119,7 +119,7 @@ export default function ReviewForm({ reviewId, onSuccess }) {
             onChange={(e) => setUserJob(e.target.value)}
             maxLength={120}
             placeholder="Job title…"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent   "
           />
           <p className="text-xs text-gray-500 mt-1">{user_job.length}/120</p>
         </div>
@@ -136,7 +136,7 @@ export default function ReviewForm({ reviewId, onSuccess }) {
       </div>
 
       <div className="mt-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label className="block text-sm font-medium text-gray-700  mb-2">
           Review Text *
         </label>
         <textarea
@@ -145,7 +145,7 @@ export default function ReviewForm({ reviewId, onSuccess }) {
           rows={5}
           maxLength={1000}
           placeholder="What did they say?"
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent   "
           required
         />
         <p className="text-xs text-gray-500 mt-1">{review_text.length}/1000</p>

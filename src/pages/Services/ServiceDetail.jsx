@@ -21,9 +21,9 @@ export default function ServiceDetail() {
       <PageLayout title="Service Details | ProfMSE">
         <PageHeader title="Service Details" description="Loading service information..." />
         <div className="col-span-12">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 text-center">
+          <div className="bg-white  rounded-lg shadow-sm border border-gray-200  p-6 text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500 mx-auto" />
-            <p className="mt-2 text-gray-600 dark:text-gray-300">
+            <p className="mt-2 text-gray-600 ">
               Loading service details...
             </p>
           </div>
@@ -37,8 +37,8 @@ export default function ServiceDetail() {
       <PageLayout title="Service Not Found | ProfMSE">
         <PageHeader title="Service Not Found" description="The requested service could not be found." />
         <div className="col-span-12">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 text-center">
-            <p className="text-gray-600 dark:text-gray-300 mb-4">
+          <div className="bg-white  rounded-lg shadow-sm border border-gray-200  p-6 text-center">
+            <p className="text-gray-600  mb-4">
               Service not found.
             </p>
             <Link
@@ -58,18 +58,18 @@ export default function ServiceDetail() {
     <PageLayout title={`${service.title} | ProfMSE`}>
       <div className="col-span-12">
         {/* Header with navigation */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
+        <div className="bg-white  rounded-lg shadow-sm border border-gray-200  p-6 mb-6">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-4">
               <Link
                 to="/services"
-                className="inline-flex items-center text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors"
+                className="inline-flex items-center text-gray-600 hover:text-gray-900   transition-colors"
               >
                 <ArrowLeft className="w-5 h-5 mr-2" />
                 Back to Services
               </Link>
-              <div className="h-6 w-px bg-gray-300 dark:bg-gray-600" />
-              <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
+              <div className="h-6 w-px bg-gray-300 " />
+              <h1 className="text-2xl font-semibold text-gray-900 ">
                 Service Details
               </h1>
             </div>
@@ -84,10 +84,10 @@ export default function ServiceDetail() {
         </div>
 
         {/* Service Details Content */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div className="bg-white  rounded-lg shadow-sm border border-gray-200  overflow-hidden">
           {/* Title Section */}
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+          <div className="p-6 border-b border-gray-200 ">
+            <h2 className="text-xl font-semibold text-gray-900  mb-2">
               {service.title}
             </h2>
           </div>
@@ -96,11 +96,11 @@ export default function ServiceDetail() {
           <div className="p-6 space-y-8">
             {/* Description */}
             <div>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">
+              <h3 className="text-lg font-medium text-gray-900  mb-3">
                 Description
               </h3>
-              <div className="prose prose-gray dark:prose-invert max-w-none">
-                <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
+              <div className="prose prose-gray  max-w-none">
+                <p className="text-gray-700  whitespace-pre-wrap leading-relaxed">
                   {service.description}
                 </p>
               </div>
@@ -109,13 +109,13 @@ export default function ServiceDetail() {
             {/* Features */}
             {service.features && service.features.length > 0 && (
               <div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">
+                <h3 className="text-lg font-medium text-gray-900  mb-3">
                   Features
                 </h3>
-                <div className="prose prose-gray dark:prose-invert max-w-none">
+                <div className="prose prose-gray  max-w-none">
                   <ul className="list-disc list-inside space-y-2">
                     {service.features.map((feature, index) => (
-                      <li key={index} className="text-gray-700 dark:text-gray-300">
+                      <li key={index} className="text-gray-700 ">
                         {feature}
                       </li>
                     ))}
@@ -127,15 +127,15 @@ export default function ServiceDetail() {
             {/* Link */}
             {service.link && (
               <div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">
+                <h3 className="text-lg font-medium text-gray-900  mb-3">
                   Link
                 </h3>
-                <div className="prose prose-gray dark:prose-invert max-w-none">
+                <div className="prose prose-gray  max-w-none">
                   <a
                     href={service.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 underline break-all inline-flex items-center"
+                    className="text-brand-600 hover:text-brand-700   underline break-all inline-flex items-center"
                   >
                     {service.link}
                     <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -149,10 +149,10 @@ export default function ServiceDetail() {
             {/* Image */}
             {service.image && (
               <div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">
+                <h3 className="text-lg font-medium text-gray-900  mb-3">
                   Service Image
                 </h3>
-                <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                <div className="border border-gray-200  rounded-lg overflow-hidden">
                   <img
                     src={service.image}
                     alt={service.title}
@@ -163,12 +163,12 @@ export default function ServiceDetail() {
             )}
 
             {/* Metadata */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-              <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
-                <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-gray-200 ">
+              <div className="bg-gray-50  rounded-lg p-4">
+                <h4 className="text-sm font-medium text-gray-500  mb-2">
                   Created At
                 </h4>
-                <p className="text-gray-700 dark:text-gray-300">
+                <p className="text-gray-700 ">
                   {service.created_at 
                     ? new Date(service.created_at).toLocaleDateString('en-US', {
                         year: 'numeric',
@@ -179,11 +179,11 @@ export default function ServiceDetail() {
                   }
                 </p>
               </div>
-              <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
-                <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
+              <div className="bg-gray-50  rounded-lg p-4">
+                <h4 className="text-sm font-medium text-gray-500  mb-2">
                   Updated At
                 </h4>
-                <p className="text-gray-700 dark:text-gray-300">
+                <p className="text-gray-700 ">
                   {service.updated_at 
                     ? new Date(service.updated_at).toLocaleDateString('en-US', {
                         year: 'numeric',

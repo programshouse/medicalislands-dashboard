@@ -8,7 +8,7 @@ const ServiceCard = ({
   className = "" 
 }) => {
   return (
-    <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow ${className}`}>
+    <div className={`bg-white  rounded-lg shadow-sm border border-gray-200  overflow-hidden hover:shadow-md transition-shadow ${className}`}>
       {/* Image Section */}
       <div className="w-full h-48">
         {image ? (
@@ -18,7 +18,7 @@ const ServiceCard = ({
             className="w-full h-full object-cover"
           />
         ) : (
-          <div className="w-full h-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+          <div className="w-full h-full bg-gray-100  flex items-center justify-center">
             <span className="text-gray-400">No image available</span>
           </div>
         )}
@@ -26,10 +26,10 @@ const ServiceCard = ({
 
       {/* Content Section */}
       <div className="p-6">
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+        <h3 className="text-xl font-semibold text-gray-900  mb-3">
           {title}
         </h3>
-        <p className="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
+        <p className="text-gray-600  mb-4 leading-relaxed">
           {description}
         </p>
         
@@ -40,13 +40,13 @@ const ServiceCard = ({
               {features.slice(0, 3).map((feature, index) => (
                 <span 
                   key={index}
-                  className="inline-block bg-brand-100 dark:bg-brand-900 text-brand-800 dark:text-brand-200 text-xs px-2 py-1 rounded-full"
+                  className="inline-block bg-brand-100  text-brand-800  text-xs px-2 py-1 rounded-full"
                 >
                   {feature}
                 </span>
               ))}
               {features.length > 3 && (
-                <span className="inline-block text-gray-500 dark:text-gray-400 text-xs px-2 py-1">
+                <span className="inline-block text-gray-500  text-xs px-2 py-1">
                   +{features.length - 3} more
                 </span>
               )}

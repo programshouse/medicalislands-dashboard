@@ -47,9 +47,9 @@ export default function ReviewDetails() {
       <PageLayout title="Review Details | ProfMSE">
         <PageHeader title="Review Details" description="View review details" />
         <div className="col-span-12">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 text-center">
+          <div className="bg-white  rounded-lg shadow-sm border border-gray-200  p-6 text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500 mx-auto"></div>
-            <p className="mt-2 text-gray-600 dark:text-gray-300">Loading review details...</p>
+            <p className="mt-2 text-gray-600 ">Loading review details...</p>
           </div>
         </div>
       </PageLayout>
@@ -61,8 +61,8 @@ export default function ReviewDetails() {
       <PageLayout title="Review Details | ProfMSE">
         <PageHeader title="Review Details" description="View review details" />
         <div className="col-span-12">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 text-center">
-            <p className="text-gray-600 dark:text-gray-300">Review not found.</p>
+          <div className="bg-white  rounded-lg shadow-sm border border-gray-200  p-6 text-center">
+            <p className="text-gray-600 ">Review not found.</p>
             <button 
               onClick={() => navigate('/reviews')}
               className="mt-4 px-4 py-2 bg-brand-500 text-white rounded-lg hover:bg-brand-600"
@@ -90,20 +90,20 @@ export default function ReviewDetails() {
                 <img
                   src={typeof selectedReview.user_image === "string" ? selectedReview.user_image : (selectedReview.user_image instanceof File || selectedReview.user_image instanceof Blob) ? URL.createObjectURL(selectedReview.user_image) : ''}
                   alt={selectedReview.user_name || "Reviewer"}
-                  className="w-24 h-24 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600"
+                  className="w-24 h-24 rounded-full object-cover border-2 border-gray-200 "
                 />
               ) : (
-                <div className="w-24 h-24 rounded-full bg-gray-200 dark:bg-gray-600 border-2 border-gray-300 dark:border-gray-500 flex items-center justify-center">
-                  <svg className="w-12 h-12 text-gray-400 dark:text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                <div className="w-24 h-24 rounded-full bg-gray-200  border-2 border-gray-300  flex items-center justify-center">
+                  <svg className="w-12 h-12 text-gray-400 " fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                   </svg>
                 </div>
               )}
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                <h3 className="text-xl font-semibold text-gray-900 ">
                   {selectedReview.user_name || "Unnamed"}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-gray-600 ">
                   {selectedReview.user_job || "No job title"}
                 </p>
               </div>
@@ -111,8 +111,8 @@ export default function ReviewDetails() {
 
             {/* Review Content */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Review</h3>
-              <div className="text-gray-900 dark:text-white whitespace-pre-wrap p-4 border rounded-lg bg-gray-50 dark:bg-gray-900/50">
+              <h3 className="text-lg font-semibold text-gray-900  mb-2">Review</h3>
+              <div className="text-gray-900  whitespace-pre-wrap p-4 border rounded-lg bg-gray-50 ">
                 {selectedReview.review || "No review text"}
               </div>
             </div>
@@ -120,30 +120,30 @@ export default function ReviewDetails() {
             {/* Review Meta Information */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Status</h3>
+                <h3 className="text-lg font-semibold text-gray-900  mb-2">Status</h3>
                 <span className={`inline-flex px-3 py-2 text-sm font-medium rounded-full ${
                   selectedReview.is_active 
-                    ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100' 
-                    : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                    ? 'bg-green-100 text-green-800  '
+                    : 'bg-gray-100 text-gray-800  '
                 }`}>
                   {selectedReview.is_active ? 'Active' : 'Inactive'}
                 </span>
               </div>
               
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Created Date</h3>
-                <p className="text-gray-700 dark:text-gray-300">
+                <h3 className="text-lg font-semibold text-gray-900  mb-2">Created Date</h3>
+                <p className="text-gray-700 ">
                   {selectedReview.created_at ? new Date(selectedReview.created_at).toLocaleDateString() : 'N/A'}
                 </p>
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex justify-between items-center gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex justify-between items-center gap-4 pt-6 border-t border-gray-200 ">
               <button
                 onClick={handleDelete}
                 disabled={isDeleting}
-                className="flex items-center gap-2 px-4 py-2 border border-red-300 dark:border-red-600 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 px-4 py-2 border border-red-300  text-red-600  hover:bg-red-50  rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isDeleting ? (
                   <>
@@ -173,7 +173,7 @@ export default function ReviewDetails() {
                 
                 <button
                   onClick={() => navigate('/reviews')}
-                  className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg"
+                  className="flex items-center gap-2 px-4 py-2 border border-gray-300  hover:bg-gray-50  rounded-lg"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
