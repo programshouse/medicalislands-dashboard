@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Pagination from "../../components/ui/Pagination";
 import PageLayout from "../../components/ui/PageLayout";
 import PageHeader from "../../components/ui/PageHeader";
 import PageCard from "../../components/ui/PageCard";
@@ -8,6 +9,12 @@ import { useReviewStore } from "../../stors/useReviewStore";
 export default function ReviewList({ onAdd, onEdit, onEditComplete }) {
   const { reviews, loading, getAllReviews, deleteReview } = useReviewStore();
   const [selectedReview, setSelectedReview] = useState(null);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const total = reviews?.length || 0;
+  const lastPage = Math.max(1, Math.ceil(total / pageSize));
+  const currentPage = Math.min(page, lastPage);
+  useEffect(() => { if (page > lastPage) setPage(lastPage); }, [page, lastPage]);
   const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
@@ -61,13 +68,14 @@ export default function ReviewList({ onAdd, onEdit, onEditComplete }) {
             </button>
           </div>
 
+          <Pagination position="top" page={currentPage} pageSize={pageSize} total={total} onPageChange={setPage} onPageSizeChange={(size) => { setPageSize(size); setPage(1); }} />
           {reviews.length === 0 ? (
             <div className="text-center text-gray-600  py-10">
               No reviews yet.
             </div>
           ) : (
 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-  {reviews.map((r) => (
+  {reviews.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((r) => (
     <div
       key={r.id}
       className="rounded-xl border border-gray-200  p-4 bg-white "
@@ -163,6 +171,7 @@ export default function ReviewList({ onAdd, onEdit, onEditComplete }) {
 </div>
 
           )}
+          <Pagination position="bottom" page={currentPage} pageSize={pageSize} total={total} onPageChange={setPage} onPageSizeChange={(size) => { setPageSize(size); setPage(1); }} />
         </PageCard>
       </div>
 

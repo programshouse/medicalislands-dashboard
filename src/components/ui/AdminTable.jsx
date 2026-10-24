@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Pagination from "./Pagination";
 import { ViewButton, EditButton, DeleteButton } from "./IconButton";
 
 const AdminTable = ({ 
@@ -12,6 +13,13 @@ const AdminTable = ({
   addText = "Add New",
   className = "" 
 }) => {
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const total = data?.length || 0;
+  const lastPage = Math.max(1, Math.ceil(total / pageSize));
+  const currentPage = Math.min(page, lastPage);
+  useEffect(() => { if (page > lastPage) setPage(lastPage); }, [page, lastPage]);
+  const offset = (currentPage - 1) * pageSize;
   return (
     <div className={`bg-white  rounded-lg shadow-sm border border-gray-200  ${className}`}>
       <div className="p-6 border-b border-gray-200 ">
@@ -28,6 +36,7 @@ const AdminTable = ({
         </div>
       </div>
       
+      <Pagination position="top" page={currentPage} pageSize={pageSize} total={total} onPageChange={setPage} onPageSizeChange={(size) => { setPageSize(size); setPage(1); }} />
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-gray-50 ">
@@ -47,7 +56,9 @@ const AdminTable = ({
           </thead>
           <tbody className="bg-white  divide-y divide-gray-200 ">
             {data && data.length > 0 ? (
-              data.map((item, index) => (
+              data.slice(offset, offset + pageSize).map((item, pageIndex) => {
+                const index = offset + pageIndex;
+                return (
                 <tr key={index} className="hover:bg-gray-50 ">
                   {columns.map((column, colIndex) => (
                     <td key={colIndex} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 ">
@@ -70,7 +81,8 @@ const AdminTable = ({
                     </div>
                   </td>
                 </tr>
-              ))
+                );
+              })
             ) : (
               <tr>
                 <td colSpan={columns.length + 1} className="px-6 py-4 text-center text-gray-500 ">
@@ -81,6 +93,7 @@ const AdminTable = ({
           </tbody>
         </table>
       </div>
+      <Pagination position="bottom" page={currentPage} pageSize={pageSize} total={total} onPageChange={setPage} onPageSizeChange={(size) => { setPageSize(size); setPage(1); }} />
     </div>
   );
 };

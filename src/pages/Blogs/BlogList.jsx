@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Pagination from "../../components/ui/Pagination";
 import PageLayout from "../../components/ui/PageLayout";
 import PageHeader from "../../components/ui/PageHeader";
 import PageCard from "../../components/ui/PageCard";
@@ -8,6 +9,12 @@ import { useBlogStore } from "../../stors/useBlogStore";
 export default function BlogList({ onEdit, onAdd }) {
   const { blogs, loading, error, fetchBlogs, deleteBlog } = useBlogStore();
   const [selectedBlog, setSelectedBlog] = useState(null);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const total = blogs?.length || 0;
+  const lastPage = Math.max(1, Math.ceil(total / pageSize));
+  const currentPage = Math.min(page, lastPage);
+  useEffect(() => { if (page > lastPage) setPage(lastPage); }, [page, lastPage]);
 
   useEffect(() => {
     fetchBlogs();
@@ -74,13 +81,14 @@ export default function BlogList({ onEdit, onAdd }) {
             </button>
           </div>
 
+          <Pagination position="top" page={currentPage} pageSize={pageSize} total={total} onPageChange={setPage} onPageSizeChange={(size) => { setPageSize(size); setPage(1); }} />
           {blogs.length === 0 ? (
             <div className="text-center text-gray-600  py-10">
               No blog posts yet.
             </div>
           ) : (
  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-  {blogs.map((blog) => (
+  {blogs.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((blog) => (
     <div
       key={blog.id}
       className="rounded-xl border border-gray-200  p-4 bg-white "
@@ -154,6 +162,7 @@ export default function BlogList({ onEdit, onAdd }) {
 </div>
 
           )}
+          <Pagination position="bottom" page={currentPage} pageSize={pageSize} total={total} onPageChange={setPage} onPageSizeChange={(size) => { setPageSize(size); setPage(1); }} />
         </PageCard>
       </div>
 
