@@ -5,7 +5,7 @@ import { useBlogStore } from "../../stors/useBlogStore";
 import { useAuthStore } from "../../stors/useAuthStore";
 import { Editor } from "@tinymce/tinymce-react";
 
-export default function BlogFormTiny({ blogId, onSuccess, apiKey = "f707a2cd0a74c58e9d3b8a2bcb845fafe8f3fc99de3c4fa58402f84b40a810b3" }) {
+export default function BlogFormTiny({ blogId, onSuccess, apiKey = import.meta.env.VITE_TINYMCE_API_KEY }) {
   const { loading, selectedBlog, fetchBlogById, createBlog, updateBlog } = useBlogStore();
   const { admin } = useAuthStore();
   const [saving, setSaving] = useState(false);
