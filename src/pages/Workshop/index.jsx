@@ -9,15 +9,17 @@ export default function Workshop() {
   const [showForm, setShowForm] = useState(false);
   const [editingWorkshop, setEditingWorkshop] = useState(null);
 
-  const isForm = location.pathname.includes('/form') || showForm;
+  const isForm = location.pathname.includes('/form');
 
   const handleEdit = (workshop) => {
     setEditingWorkshop(workshop);
+    navigate("/workshop/form", { state: { editingItem: workshop } });
     setShowForm(true);
   };
 
   const handleAdd = () => {
     setEditingWorkshop(null);
+    navigate("/workshop/form");
     setShowForm(true);
   };
 
@@ -26,6 +28,7 @@ export default function Workshop() {
   };
 
   const handleFormSuccess = () => {
+    if (location.pathname.includes("/form")) navigate("/workshop", { replace: true });
     setShowForm(false);
     setEditingWorkshop(null);
   };
@@ -33,7 +36,7 @@ export default function Workshop() {
   if (isForm) {
     return (
       <WorkshopForm 
-        workshopId={editingWorkshop?.id} 
+        workshopId={editingWorkshop?.id ?? location.state?.editingItem?.id} 
         onSuccess={handleFormSuccess}
       />
     );

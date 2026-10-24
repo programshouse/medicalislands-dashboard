@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import PageHeader from "../../components/ui/PageHeader";
 import AdminForm from "../../components/ui/AdminForm";
 import Toaster, { notify } from "../../components/ui/Toaster/Toaster";
@@ -31,6 +31,9 @@ const SocialRow = React.memo(function SocialRow({ label, value, onChange, disabl
 
 export default function SettingsForm({ onSuccess }) {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const closeForm = () => { if (onSuccess) onSuccess(); else navigate(location.pathname === "/form" ? "/" : "/settings"); };
   const id = searchParams.get("id");
   const isReadOnly =
     searchParams.get("readonly") === "1" || searchParams.get("mode") === "view";
@@ -170,7 +173,7 @@ export default function SettingsForm({ onSuccess }) {
           <AdminForm
             title="Site Information"
             onSubmit={submit}
-            onCancel={onSuccess}
+            onCancel={closeForm}
             submitText={isReadOnly ? "Close" : saving ? "Saving..." : "Save Settings"}
             submitDisabled={isReadOnly ? false : saving || !valid}
           >

@@ -1,12 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 import { useSidebar } from "../context/SidebarContext";
 // import NotificationDropdown from "../components/header/NotificationDropdown";
 import UserDropdown from "../components/header/UserDropdown";
 import { useAuthStore } from "../stors/useAuthStore";
 
 const AppHeader = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const path = location.pathname;
+  const section = ["workshop", "services", "blogs", "reviews", "settings"].find(x => path === `/${x}` || path.startsWith(`/${x}/`));
+  const backTarget = path === "/" ? null : path === "/form" ? "/" : section && path !== `/${section}` ? `/${section}` : "/";
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
 
@@ -41,11 +47,12 @@ const AppHeader = () => {
   }, []);
 
   return (
-    <header className="sticky top-0 flex w-full bg-white border-gray-200 z-99999   lg:border-b">
+    <header className="sticky top-0 flex w-full bg-white border-gray-200 z-30   lg:border-b">
       <div className="flex flex-col items-center justify-between grow lg:flex-row lg:px-6">
         <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b border-gray-200  sm:gap-4 lg:justify-normal lg:border-b-0 lg:px-0 lg:py-4">
+          {backTarget && <button type="button" onClick={() => navigate(backTarget)} aria-label={backTarget === "/" ? "Back to home" : "Back to list"} title={backTarget === "/" ? "Back to home" : "Back to list"} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100"><ArrowLeft size={20}/></button>}
           <button
-            className="items-center justify-center w-10 h-10 text-gray-500 border-gray-200 rounded-lg z-99999  lg:flex  lg:h-11 lg:w-11 lg:border"
+            className="items-center justify-center w-10 h-10 text-gray-500 border-gray-200 rounded-lg z-30  lg:flex  lg:h-11 lg:w-11 lg:border"
             onClick={handleToggle}
             aria-label="Toggle Sidebar"
           >
@@ -85,7 +92,7 @@ const AppHeader = () => {
 
           <button
             onClick={toggleApplicationMenu}
-            className="flex items-center justify-center w-10 h-10 text-gray-700 rounded-lg z-99999 hover:bg-gray-100   lg:hidden"
+            className="flex items-center justify-center w-10 h-10 text-gray-700 rounded-lg z-30 hover:bg-gray-100   lg:hidden"
           >
             <svg
               width="24"

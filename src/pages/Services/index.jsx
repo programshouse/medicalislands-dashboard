@@ -11,15 +11,17 @@ export default function Services() {
   const [editingService, setEditingService] = useState(null);
   const { getAllServices } = useServicesStore();
 
-  const isForm = location.pathname.includes("/form") || showForm;
+  const isForm = location.pathname.includes("/form");
 
   const handleEdit = (service) => {
     setEditingService(service);
+    navigate("/services/form", { state: { editingItem: service } });
     setShowForm(true);
   };
 
   const handleAdd = () => {
     setEditingService(null);
+    navigate("/services/form");
     setShowForm(true);
   };
 
@@ -28,6 +30,7 @@ export default function Services() {
   };
 
   const handleFormSuccess = () => {
+    if (location.pathname.includes("/form")) navigate("/services", { replace: true });
     setShowForm(false);
     setEditingService(null);
     // Refresh the services list after successful create/update
@@ -37,7 +40,7 @@ export default function Services() {
   if (isForm) {
     return (
       <ServiceForm
-        serviceId={editingService?.id}
+        serviceId={editingService?.id ?? location.state?.editingItem?.id}
         onSuccess={handleFormSuccess}
       />
     );

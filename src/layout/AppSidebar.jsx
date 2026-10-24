@@ -2,17 +2,20 @@ import { useCallback, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   MdWork,
+  MdHome,
   MdBusiness,
   MdArticle,
   MdDescription,
   MdReviews,
 } from "react-icons/md";
+import { ArrowLeft } from "lucide-react";
 import { ChevronDownIcon } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import SidebarWidget from "./SidebarWidget";
 
 /** Use your existing items; they will be sorted A→Z by name */
 const navItems = [
+  // { name: "Home", icon: <MdHome />, path: "/" },
   { name: "Blogs",    icon: <MdArticle />,     path: "/blogs"   },
   { name: "Contact",  icon: <MdDescription />, path: "/form"    },
   { name: "Reviews",  icon: <MdReviews />,     path: "/reviews" },
@@ -21,7 +24,7 @@ const navItems = [
 ];
 
 const AppSidebar = () => {
-  const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
+  const { isExpanded, isMobileOpen, isHovered, setIsHovered, closeMobileSidebar } = useSidebar();
 
   // sort A→Z
   const getSortedNavItems = (items) =>
@@ -30,7 +33,7 @@ const AppSidebar = () => {
   const location = useLocation();
   const [openSubmenu, setOpenSubmenu] = useState(null);
 
-  const isActive = useCallback((path) => location.pathname === path, [location.pathname]);
+  const isActive = useCallback((path) => location.pathname === path || (path !== "/form" && location.pathname.startsWith(path + "/")), [location.pathname]);
 
   useEffect(() => {
     setOpenSubmenu(null);
@@ -39,21 +42,24 @@ const AppSidebar = () => {
   const handleSubmenuToggle = (index) =>
     setOpenSubmenu((prev) => (prev && prev.index === index ? null : { index }));
 
+  useEffect(() => { closeMobileSidebar(); }, [location.pathname]);
+
   const wide = isExpanded || isHovered || isMobileOpen;
 
   return (
     <aside
-      className={`fixed top-0 left-0 z-50 mt-16 flex h-screen flex-col border-r border-brand-800
-        bg-brand-600 text-white transition-all duration-300 ease-in-out lg:mt-0
+      className={`fixed top-0 left-0 z-50 flex h-[100dvh] flex-col border-r border-brand-800
+        bg-brand-600 text-white transition-all duration-300 ease-in-out lg:h-screen
 
         ${wide ? "w-[290px]" : "w-[90px]"}
         ${isMobileOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
-      onMouseEnter={() => !isExpanded && setIsHovered(true)}
+      onMouseEnter={() => window.innerWidth >= 1024 && !isExpanded && setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      <button type="button" onClick={closeMobileSidebar} aria-label="Close sidebar" className="absolute right-3 top-4 z-10 flex items-center gap-1 rounded-lg bg-white/15 px-3 py-2 text-sm text-white lg:hidden"><ArrowLeft size={18} /> Close</button>
       {/* Logo */}
-      <div className="flex py-8 lg:justify-center">
-        <Link to="/">
+      <div className="flex justify-center items-center px-4 pt-16 pb-7 lg:py-8">
+        <Link to="/" onClick={closeMobileSidebar}>
           {wide ? (
             <img
               className=" bg-white rounded-full"
@@ -83,6 +89,7 @@ const AppSidebar = () => {
               <li key={nav.name}>
                 <Link
                   to={nav.path}
+                  onClick={closeMobileSidebar}
                   className={[
                     // base
                     "group flex items-center gap-3 rounded-xl px-6 mx-4 py-2.5 transition-colors",
@@ -124,6 +131,7 @@ const AppSidebar = () => {
                         <li key={sub.name}>
                           <Link
                             to={sub.path}
+                            onClick={closeMobileSidebar}
                             className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-white/85 hover:bg-white/10 hover:text-white"
                           >
                             {sub.name}
